@@ -18,8 +18,8 @@ export function ServicesSection({ data }: Readonly<{ data: HomeData['services'] 
           <p className="text-slate-600 max-w-2xl text-lg">{data.description}</p>
         </motion.div>
 
-        {/* Grilla 2x2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Grilla de servicios */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {data.cards.map((card, index) => (
             <motion.div
               key={card.id}
@@ -36,11 +36,11 @@ export function ServicesSection({ data }: Readonly<{ data: HomeData['services'] 
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               {/* Overlay Difuminado */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
               
               {/* Texto */}
-              <div className="absolute bottom-8 left-8">
-                <p className="text-white text-2xl font-medium tracking-tight uppercase">
+              <div className="absolute bottom-8 left-8 pr-8">
+                <p className="text-white text-xl font-medium tracking-tight">
                   {card.title}
                 </p>
               </div>

@@ -21,8 +21,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
+import { createLead } from "@/app/actions/leads";
 
-export function ContactForm({ experiences }: { readonly experiences: string[] }) {
+const experiences = [
+  "Experiencia A",
+  "Experiencia B",
+  "Experiencia C",
+  "Experiencia D",
+];
+const cruises = ["Crucero X", "Crucero Y", "Crucero Z"];
+
+export function ContactForm({ selectorKey }: { readonly selectorKey: string }) {
+  const labelStyle = "text-xs uppercase font-bold text-slate-500";
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(ContactSchema),
     defaultValues: {
@@ -32,18 +42,22 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
       email: "",
       confirmarEmail: "",
       celular: "",
-      experiencia: "",
+      selector: "",
     },
   });
 
   async function onSubmit(data: ContactFormValues) {
     try {
-      // Aquí llamaremos a la Server Action más adelante
-      console.log("Datos enviados:", data);
-      toast.success("¡Mensaje enviado! Nos contactaremos pronto.");
-      form.reset();
-    } catch (error) {
-      toast.error("Hubo un error al enviar el formulario.");
+      const result = await createLead(data, selectorKey);
+      
+      if (result.success) {
+        toast.success("¡Mensaje enviado! Nos contactaremos pronto.");
+        form.reset();
+      } else {
+        toast.error(result.error || "Algo salió mal.");
+      }
+    } catch {
+      toast.error("Error de conexión con el servidor.");
     }
   }
 
@@ -56,9 +70,7 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
             name="nombre"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                  Nombre
-                </FormLabel>
+                <FormLabel className={labelStyle}>Nombre</FormLabel>
                 <FormControl>
                   <Input placeholder="John" {...field} />
                 </FormControl>
@@ -71,9 +83,7 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
             name="apellido"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                  Apellido
-                </FormLabel>
+                <FormLabel className={labelStyle}>Apellido</FormLabel>
                 <FormControl>
                   <Input placeholder="Doe" {...field} />
                 </FormControl>
@@ -88,9 +98,7 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
           name="fechaNacimiento"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                Fecha de Nacimiento
-              </FormLabel>
+              <FormLabel className={labelStyle}>Fecha de Nacimiento</FormLabel>
               <FormControl>
                 <Input type="date" {...field} />
               </FormControl>
@@ -104,9 +112,7 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                Correo electrónico
-              </FormLabel>
+              <FormLabel className={labelStyle}>Correo electrónico</FormLabel>
               <FormControl>
                 <Input
                   type="email"
@@ -124,9 +130,7 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
           name="confirmarEmail"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                Confirmar correo
-              </FormLabel>
+              <FormLabel className={labelStyle}>Confirmar correo</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="Repite tu email" {...field} />
               </FormControl>
@@ -140,9 +144,7 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
           name="celular"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                Celular (Opcional)
-              </FormLabel>
+              <FormLabel className={labelStyle}>Celular (Opcional)</FormLabel>
               <FormControl>
                 <Input placeholder="+57 ..." {...field} />
               </FormControl>
@@ -153,24 +155,28 @@ export function ContactForm({ experiences }: { readonly experiences: string[] })
 
         <FormField
           control={form.control}
-          name="experiencia"
+          name="selector"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs uppercase font-bold text-slate-500">
-                Experiencia
+              <FormLabel className={labelStyle}>
+                {selectorKey === "experiences"
+                  ? "Experiencia de interés"
+                  : "Crucero de interés"}
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona una opción" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {experiences.map((exp) => (
-                    <SelectItem key={exp} value={exp}>
-                      {exp}
-                    </SelectItem>
-                  ))}
+                  {(selectorKey === "experiences" ? experiences : cruises).map(
+                    (item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
               <FormMessage />

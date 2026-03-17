@@ -21,7 +21,7 @@ export function ExperienceCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.6 }}
       viewport={{ once: true }}
-      className={`relative overflow-hidden rounded-2xl group min-h-100 
+      className={`relative overflow-hidden rounded group min-h-100 
                 ${isFeatured ? "md:col-span-6 h-125" : "md:col-span-3 lg:col-span-2 h-112.5"}`}
     >
       {/* Imagen de Fondo */}
@@ -38,7 +38,7 @@ export function ExperienceCard({
       {/* Contenido */}
       <div className="absolute inset-0 p-8 flex flex-col justify-end">
         <h3
-          className={`text-white font-bold tracking-tighter uppercase mb-6 max-w-md
+          className={`text-white font-bold tracking-tighter mb-6 max-w-md
                     ${isFeatured ? "text-4xl" : "text-2xl"}`}
         >
           {exp.title}

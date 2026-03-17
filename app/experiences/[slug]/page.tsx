@@ -36,8 +36,8 @@ export default function DetailedExperiencePage({
 
   return (
     <>
-      <header className="pt-40 pb-20 text-center">
-        <h1 className="text-5xl font-bold tracking-tighter uppercase italic">
+      <header className="pt-28 pb-8 text-center">
+        <h1 className="text-5xl font-bold tracking-tighter">
           {experience.title}
         </h1>
       </header>
@@ -61,15 +61,15 @@ export default function DetailedExperiencePage({
       <FormSidebar
         isOpen={activeForm === "contact"}
         onClose={closeForm}
-        title="Nuestros asesores estarán encantados de ponerse en contacto contigo"
+        text="Nuestros asesores estarán encantados de ponerse en contacto contigo"
       >
-        <ContactForm experiences={[experience.title]} />
+        <ContactForm selectorKey="experiences" />
       </FormSidebar>
 
       <FormSidebar
         isOpen={activeForm === "brochure"}
         onClose={closeForm}
-        title="" // El título ya está dentro de BrochureForm
+        text="Recibe a tu correo electrónico el brochure de tu experiencia de interés"
       >
         <BrochureForm experiences={[experience.title]} />
       </FormSidebar>

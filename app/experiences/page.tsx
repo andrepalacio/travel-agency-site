@@ -1,5 +1,8 @@
+"use client";
+
 import { ExperienceCard } from "@/components/experiences/ExperienceCard";
 import { Experience } from "@/types/experience";
+import { motion } from "framer-motion";
 
 // Mock de datos (esto vendría de tu Context/DB)
 const experiencesData: Experience[] = [
@@ -11,13 +14,19 @@ const experiencesData: Experience[] = [
 
 export default function ExperienciasPage() {
   return (
-    <div className="min-h-screen bg-white pt-40 pb-20 px-6 md:px-20">
+    <div className="min-h-screen pt-28 pb-20 px-6 md:px-20">
       <div className="max-w-7xl mx-auto">
         
         {/* Encabezado de la página */}
         <header className="mb-16">
-          <h1 className="text-5xl font-bold tracking-tighter uppercase italic">Experiencias</h1>
-          <div className="w-20 h-1 bg-black mt-4" />
+          <div>
+            <h1 className="text-5xl font-bold tracking-tighter italic">Experiencias</h1>
+            <motion.div 
+              className="w-20 h-1 bg-black mt-4"
+              animate={{ width: [80, 250, 80] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
         </header>
 
         {/* Grilla Dinámica */}

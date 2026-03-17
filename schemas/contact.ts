@@ -7,7 +7,7 @@ export const ContactSchema = z.object({
   email: z.email("Correo electrónico inválido"),
   confirmarEmail: z.email("La confirmación es inválida"),
   celular: z.string().optional(),
-  experiencia: z.string().min(1, "Debes seleccionar una experiencia"),
+  selector: z.string().min(1, "Debes seleccionar una opción de interés"),
 }).refine((data) => data.email === data.confirmarEmail, {
   message: "Los correos electrónicos no coinciden",
   path: ["confirmarEmail"],

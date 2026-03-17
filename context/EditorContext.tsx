@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { HomeData } from '@/types/home';
-import { saveHomeContent } from "@/app/admin/actions";
+import { saveHomeContent } from "@/app/admin/actions/actions";
 import { toast } from "sonner";
 
 interface EditorContextType {

@@ -12,7 +12,7 @@ const IconMap = {
 
 export function ContactSection({ data }: Readonly<{ data: HomeData['contact'] }>) {
   return (
-    <section className="py-24 px-6 md:px-20 bg-slate-50 overflow-hidden">
+    <section className="py-24 px-6 md:px-20 bg-slate-50 overflow-hidden" id="contacto">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         
         {/* Columna Izquierda */}
@@ -24,7 +24,7 @@ export function ContactSection({ data }: Readonly<{ data: HomeData['contact'] }>
           <h2 className="text-5xl font-bold tracking-tighter uppercase mb-6 leading-tight">
             {data.leftTitle}
           </h2>
-          <p className="text-xl text-slate-500 leading-relaxed italic">
+          <p className="text-xl text-slate-500 leading-relaxed">
             {data.leftDescription}
           </p>
         </motion.div>
@@ -37,7 +37,7 @@ export function ContactSection({ data }: Readonly<{ data: HomeData['contact'] }>
           className="flex justify-center items-center relative"
         >
           {/* Círculo Gris (Color Principal Placeholder) */}
-          <div className="w-[450px] h-[450px] md:w-[550px] md:h-[550px] bg-[#333333] rounded-full flex flex-col justify-center items-center p-12 text-center text-white relative">
+          <div className="w-96 h-96 md:w-137.5 md:h-137.5 bg-expery-blue rounded-full flex flex-col justify-center items-center p-12 text-center text-white relative">
             <h3 className="text-3xl md:text-4xl font-bold mb-8 leading-snug">
               {data.circleTitle}
             </h3>

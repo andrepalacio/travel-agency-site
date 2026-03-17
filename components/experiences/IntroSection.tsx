@@ -13,21 +13,21 @@ export function IntroSection({
   readonly onOpenBrochure: () => void;
 }) {
   return (
-    <section className="pt-32 pb-20 px-6 md:px-20 w-full">
+    <section className="pb-20 px-6 md:px-20 w-full">
       <div className="max-w-7xl mx-auto w-full">
         <div className="flex flex-col items-center w-full">
           {/* Textos */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="w-full mb-12"
+            className="w-full mb-12 flex flex-col items-center"
           >
-            <div className="inline-block border border-[#D4AF37] px-6 py-2 mb-6">
-              <span className="text-[#D4AF37] font-medium uppercase tracking-widest text-sm">
+            <div className="inline-block border border-classic-gold px-6 py-2 mb-6 w-fit">
+              <span className="text-classic-gold font-medium uppercase tracking-widest text-sm">
                 {data.daysNights}
               </span>
             </div>
-            <p className="text-[#D4AF37] text-xl font-serif italic mb-6">
+            <p className="text-classic-gold text-xl font-serif italic mb-6">
               `{data.slogan}`
             </p>
             <p className="text-slate-600 leading-relaxed text-lg">
@@ -37,7 +37,7 @@ export function IntroSection({
 
           {/* Imágenes y Botones */}
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative group overflow-hidden rounded-xl h-[400px]">
+            <div className="relative group overflow-hidden rounded h-100">
               <Image
                 src={data.imageLeft}
                 alt="Asesor"
@@ -47,13 +47,13 @@ export function IntroSection({
               <div className="absolute inset-0 bg-black/40 flex items-end p-4">
                 <button
                   onClick={onOpenContact}
-                  className="w-full py-3 bg-white text-xs uppercase tracking-tighter font-bold hover:bg-[#D4AF37] hover:text-white transition-all hover:cursor-pointer"
+                  className="w-full py-3 bg-white text-xs uppercase tracking-tighter font-bold hover:bg-classic-gold hover:text-white transition-all hover:cursor-pointer rounded"
                 >
                   Contacta con un asesor
                 </button>
               </div>
             </div>
-            <div className="relative group overflow-hidden rounded-xl h-[400px]">
+            <div className="relative group overflow-hidden rounded h-100">
               <Image
                 src={data.imageRight}
                 alt="Brochure"
@@ -63,7 +63,7 @@ export function IntroSection({
               <div className="absolute inset-0 bg-black/40 flex items-end p-4">
                 <button
                   onClick={onOpenBrochure}
-                  className="w-full py-3 bg-white text-xs uppercase tracking-tighter font-bold hover:bg-[#D4AF37] hover:text-white transition-all hover:cursor-pointer"
+                  className="w-full py-3 bg-white text-xs uppercase tracking-tighter font-bold hover:bg-classic-gold hover:text-white transition-all hover:cursor-pointer rounded"
                 >
                   Solicita más información
                 </button>

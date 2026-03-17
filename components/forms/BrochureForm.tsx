@@ -1,15 +1,33 @@
-"use client"
+"use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BrochureSchema, BrochureFormValues } from "@/schemas/brochure";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { toast } from "sonner";
 
-export function BrochureForm({ experiences }: { readonly experiences: string[] }) {
+export function BrochureForm({
+  experiences,
+}: {
+  readonly experiences: string[];
+}) {
+  const labelStyle = "text-xs uppercase font-bold text-slate-500";
   const form = useForm<BrochureFormValues>({
     resolver: zodResolver(BrochureSchema),
     defaultValues: {
@@ -23,19 +41,19 @@ export function BrochureForm({ experiences }: { readonly experiences: string[] }
     try {
       // Lógica de envío (Server Action)
       console.log("Solicitud de Brochure:", data);
-      toast.success("¡Brochure enviado! Revisa tu bandeja de entrada.");
+      toast.success("¡Brochure enviado! Revisa tu bandeja de entrada.", {
+        position: "top-center",
+      });
       form.reset();
-    } catch (error) {
-      toast.error("No pudimos procesar tu solicitud.");
+    } catch {
+      toast.error("No pudimos procesar tu solicitud.", {
+        position: "top-center",
+      });
     }
   }
 
   return (
     <div className="space-y-6">
-      <p className="text-center text-slate-500 text-sm leading-relaxed px-2">
-        Recibe a tu correo electrónico el brochure de tu experiencia de interés
-      </p>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
@@ -43,9 +61,15 @@ export function BrochureForm({ experiences }: { readonly experiences: string[] }
             name="nombre"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Nombre</FormLabel>
+                <FormLabel className={labelStyle}>
+                  Nombre
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="Tu nombre completo" className="rounded-none border-t-0 border-x-0 border-b-slate-200 focus-visible:ring-0 focus-visible:border-b-black transition-all" {...field} />
+                  <Input
+                    placeholder="Tu nombre completo"
+                    // className="rounded-none border-t-0 border-x-0 border-b-slate-200 focus-visible:ring-0 focus-visible:border-b-black transition-all"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -57,9 +81,16 @@ export function BrochureForm({ experiences }: { readonly experiences: string[] }
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Correo electrónico</FormLabel>
+                <FormLabel className={labelStyle}>
+                  Correo electrónico
+                </FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="email@ejemplo.com" className="rounded-none border-t-0 border-x-0 border-b-slate-200 focus-visible:ring-0 focus-visible:border-b-black transition-all" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="email@ejemplo.com"
+                    // className="rounded-none border-t-0 border-x-0 border-b-slate-200 focus-visible:ring-0 focus-visible:border-b-black transition-all"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -71,8 +102,13 @@ export function BrochureForm({ experiences }: { readonly experiences: string[] }
             name="experiencia"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[10px] uppercase tracking-widest font-bold text-slate-400">Experiencia de interés</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormLabel className={labelStyle}>
+                  Experiencia de interés
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                >
                   <FormControl>
                     <SelectTrigger className="rounded-none border-t-0 border-x-0 border-b-slate-200">
                       <SelectValue placeholder="Selecciona el destino" />
@@ -80,7 +116,9 @@ export function BrochureForm({ experiences }: { readonly experiences: string[] }
                   </FormControl>
                   <SelectContent>
                     {experiences.map((exp) => (
-                      <SelectItem key={exp} value={exp}>{exp}</SelectItem>
+                      <SelectItem key={exp} value={exp}>
+                        {exp}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -89,7 +127,10 @@ export function BrochureForm({ experiences }: { readonly experiences: string[] }
             )}
           />
 
-          <Button type="submit" className="w-full bg-[#333] hover:bg-[#D4AF37] text-white py-6 uppercase tracking-[0.2em] text-[10px] font-bold transition-all duration-500 mt-8">
+          <Button
+            type="submit"
+            className="w-full bg-[#333] hover:bg-[#D4AF37] text-white py-6 uppercase tracking-[0.2em] text-[10px] font-bold transition-all duration-500 mt-8"
+          >
             Enviar Brochure
           </Button>
         </form>

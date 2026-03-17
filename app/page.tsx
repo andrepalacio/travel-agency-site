@@ -1,48 +1,24 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { ContactSection } from "@/components/home/ContactSection";
+import prisma from "@/lib/prisma";
+import { HomeDataSchema } from "@/lib/schemas/page-settings";
 
-// En producción, esto sería: const data = await db.home.findFirst();
-const homeData = {
-  hero: {
-    shipImageUrl: "/images/crucer-stelar.webp",
-    exploreLink: "/experiencias",
-    infoLink: "#contacto"
-  },
-  services: {
-    title: "Servicios",
-    description: "Conoce los diferentes servicios que tenemos para ofrecerte",
-    cards: [
-      { id: "1", image: "/images/ser1.jpg", title: "Cenas Estelares" },
-      { id: "2", image: "/images/ser2.jpg", title: "Órbita Privada" },
-      { id: "3", image: "/images/ser3.jpg", title: "Guías Expertos" },
-      { id: "4", image: "/images/ser4.jpg", title: "Eventos VIP" },
-    ]
-  },
-  contact: {
-    leftTitle: "Inicia tu viaje",
-    leftDescription: "En Expery Travel, no solo vendemos destinos, creamos memorias que trascienden el tiempo y el espacio. Nuestro equipo está listo para asesorarte en cada paso.",
-    circleTitle: "Estamos a tu servicio en todo momento",
-    socials: [
-      { platform: "instagram" as const, label: "Instagram", url: "https://instagram.com/experytravel" },
-      { platform: "whatsapp" as const, label: "WhatsApp", url: "https://wa.me/..." },
-      { platform: "facebook" as const, label: "Facebook", url: "https://facebook.com/..." }
-    ]
-  }
-};
+async function getHomeData() {
+  const raw = await prisma.pageSettings.findFirst({ where: { id: "home" } });
+  if (!raw) throw new Error("No se encontró la configuración del home.");
+  return HomeDataSchema.parse(raw.data);
+}
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { hero, services, contact } = await getHomeData();
+
   return (
-    <div className="relative min-h-screen bg-white">
+    <div className="relative min-h-screen">
       <main>
-        {/* 1. Impacto visual inmediato */}
-        <HeroSection data={homeData.hero} />
-
-        {/* 2. Información detallada y funcional */}
-        <ServicesSection data={homeData.services} />
-
-        {/* 3. Cierre y conversión (Call to Action) */}
-        <ContactSection data={homeData.contact} />
+        <HeroSection data={hero} />
+        <ServicesSection data={services} />
+        <ContactSection data={contact} />
       </main>
     </div>
   );

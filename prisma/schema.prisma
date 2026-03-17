@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Para textos fijos del Home y Globales
+model PageSettings {
+  id    String @id @default("home")
+  data  Json   // Aquí guardamos el objeto de Hero, Contacto, etc.
+}
+
+model Experience {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  title        String
+  isFeatured   Boolean  @default(false)
+  imageUrl     String   // URL de Vercel Blob
+  intro        Json     // Slogan, días/noches, descripción
+  itinerary    Json     // Mapa, salida/llegada, imagen principal
+  amenities    Json     // Inclusiones, comodidades, requisitos
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Cruise {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  imageUrl    String   // URL de Vercel Blob
+  ctaText     String
+  externalLink String
+  order       Int      @default(0)
+}
+
+model Lead {
+  id                String   @id @default(cuid())
+  nombre            String
+  apellido          String
+  email             String   @unique
+  fechaNacimiento   String   // Guardado como string para coincidir con el input type="date"
+  celular           String?  // Opcional en tu formulario
+  interesSeleccionado String   // Guardará el valor de "Experiencia" o "Crucero"
+  tipoInteres       String   // Guardará si fue "experiences" o "cruises"
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model PotentialLead {
+  id                String   @id @default(cuid())
+  nombre            String
+  email             String
+  brochureId        String
+  fechaNotificacion DateTime @default(now())
+}
