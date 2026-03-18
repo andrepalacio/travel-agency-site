@@ -24,10 +24,10 @@ export function NavBar() {
       }
 
       // Show/hide navbar based on scroll direction
-      if (currentScrollY > lastScrollY) {
-        setVisible(false); // scrolling down
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setVisible(false);
       } else {
-        setVisible(true); // scrolling up
+        setVisible(true);
       }
 
       setLastScrollY(currentScrollY);
