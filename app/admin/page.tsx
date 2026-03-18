@@ -1,3 +1,5 @@
+"use client";
+
 // app/admin/page.tsx
 import { EditorProvider } from "@/context/EditorContext";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
