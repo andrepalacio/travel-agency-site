@@ -7,7 +7,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-expery-blue text-white border-t border-white/10 py-16 px-6 md:px-20">
+    <footer className="bg-expery-blue text-white border-t border-white/10 py-12 px-6 md:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 items-start">
         
         {/* COLUMNA IZQUIERDA: Logo Símbolo */}
@@ -25,7 +25,7 @@ export function Footer() {
         {/* COLUMNA MEDIO: Impacto y Privacidad */}
         <div className="flex flex-col gap-4 text-center md:text-left">
           <p className="uppercase tracking-[0.2em] text-xs font-semibold">
-            Impactando el mundo
+            Impactando positivamente el turismo y la sociedad
           </p>
           <Link 
             href="/docs/politicas-privacidad.pdf" 

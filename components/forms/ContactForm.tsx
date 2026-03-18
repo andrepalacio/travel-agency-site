@@ -23,15 +23,7 @@ import {
 import { toast } from "sonner";
 import { createLead } from "@/app/actions/leads";
 
-const experiences = [
-  "Experiencia A",
-  "Experiencia B",
-  "Experiencia C",
-  "Experiencia D",
-];
-const cruises = ["Crucero X", "Crucero Y", "Crucero Z"];
-
-export function ContactForm({ selectorKey }: { readonly selectorKey: string }) {
+export function ContactForm({ type, selector }: { readonly type: string; readonly selector: readonly { title: string }[] }) {
   const labelStyle = "text-xs uppercase font-bold text-slate-500";
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(ContactSchema),
@@ -42,14 +34,14 @@ export function ContactForm({ selectorKey }: { readonly selectorKey: string }) {
       email: "",
       confirmarEmail: "",
       celular: "",
-      selector: "",
+      interesSeleccionado: "",
     },
   });
 
   async function onSubmit(data: ContactFormValues) {
     try {
-      const result = await createLead(data, selectorKey);
-      
+      const result = await createLead(data);
+
       if (result.success) {
         toast.success("¡Mensaje enviado! Nos contactaremos pronto.");
         form.reset();
@@ -100,7 +92,7 @@ export function ContactForm({ selectorKey }: { readonly selectorKey: string }) {
             <FormItem>
               <FormLabel className={labelStyle}>Fecha de Nacimiento</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Input type="date" {...field} className="cursor-pointer"/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -155,28 +147,26 @@ export function ContactForm({ selectorKey }: { readonly selectorKey: string }) {
 
         <FormField
           control={form.control}
-          name="selector"
+          name="interesSeleccionado"
           render={({ field }) => (
             <FormItem>
               <FormLabel className={labelStyle}>
-                {selectorKey === "experiences"
+                {type === "experience"
                   ? "Experiencia de interés"
                   : "Crucero de interés"}
               </FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="cursor-pointer">
                     <SelectValue placeholder="Selecciona una opción" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {(selectorKey === "experiences" ? experiences : cruises).map(
-                    (item) => (
-                      <SelectItem key={item} value={item}>
-                        {item}
-                      </SelectItem>
-                    ),
-                  )}
+                    {selector.map((item) => (
+                    <SelectItem key={item.title} value={item.title}>
+                      {item.title}
+                    </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -186,7 +176,7 @@ export function ContactForm({ selectorKey }: { readonly selectorKey: string }) {
 
         <Button
           type="submit"
-          className="w-full bg-[#333] hover:bg-black text-white py-6 uppercase tracking-widest text-xs font-bold transition-all mt-6"
+          className="w-full bg-expery-blue hover:bg-expery-iron text-white py-6 uppercase tracking-widest text-xs font-bold transition-all mt-6 cursor-pointer"
         >
           Enviar solicitud
         </Button>

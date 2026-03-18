@@ -2,7 +2,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesSection } from "@/components/home/ServicesSection";
 import { ContactSection } from "@/components/home/ContactSection";
 import prisma from "@/lib/prisma";
-import { HomeDataSchema } from "@/lib/schemas/page-settings";
+import { HomeDataSchema } from "@/schemas/page-settings";
 
 async function getHomeData() {
   const raw = await prisma.pageSettings.findFirst({ where: { id: "home" } });

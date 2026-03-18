@@ -21,11 +21,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
+import { registerPotentialLead } from "@/app/actions/leads";
 
 export function BrochureForm({
-  experiences,
+  brochures,
 }: {
-  readonly experiences: string[];
+  readonly brochures: readonly { id: number; name: string }[];
 }) {
   const labelStyle = "text-xs uppercase font-bold text-slate-500";
   const form = useForm<BrochureFormValues>({
@@ -33,18 +34,24 @@ export function BrochureForm({
     defaultValues: {
       nombre: "",
       email: "",
-      experiencia: "",
+      brochureId: "1",
     },
   });
 
   async function onSubmit(data: BrochureFormValues) {
     try {
-      // Lógica de envío (Server Action)
-      console.log("Solicitud de Brochure:", data);
-      toast.success("¡Brochure enviado! Revisa tu bandeja de entrada.", {
-        position: "top-center",
-      });
-      form.reset();
+      const result = await registerPotentialLead(data);
+
+      if (result.success) {
+        toast.success("¡Brochure enviado! Revisa tu bandeja de entrada.", {
+          position: "top-center",
+        });
+        form.reset();
+      } else {
+        toast.error(result.error || "Algo salió mal.", {
+          position: "top-center",
+        });
+      }
     } catch {
       toast.error("No pudimos procesar tu solicitud.", {
         position: "top-center",
@@ -61,15 +68,9 @@ export function BrochureForm({
             name="nombre"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={labelStyle}>
-                  Nombre
-                </FormLabel>
+                <FormLabel className={labelStyle}>Nombre</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Tu nombre completo"
-                    // className="rounded-none border-t-0 border-x-0 border-b-slate-200 focus-visible:ring-0 focus-visible:border-b-black transition-all"
-                    {...field}
-                  />
+                  <Input placeholder="Tu nombre completo" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -81,14 +82,11 @@ export function BrochureForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={labelStyle}>
-                  Correo electrónico
-                </FormLabel>
+                <FormLabel className={labelStyle}>Correo electrónico</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="email@ejemplo.com"
-                    // className="rounded-none border-t-0 border-x-0 border-b-slate-200 focus-visible:ring-0 focus-visible:border-b-black transition-all"
                     {...field}
                   />
                 </FormControl>
@@ -99,25 +97,25 @@ export function BrochureForm({
 
           <FormField
             control={form.control}
-            name="experiencia"
+            name="brochureId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className={labelStyle}>
-                  Experiencia de interés
+                  Información de interés
                 </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="rounded-none border-t-0 border-x-0 border-b-slate-200">
+                    <SelectTrigger className="cursor-pointer">
                       <SelectValue placeholder="Selecciona el destino" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {experiences.map((exp) => (
-                      <SelectItem key={exp} value={exp}>
-                        {exp}
+                    <SelectItem value="1">
+                      Brochure general de Expery Travel
+                    </SelectItem>
+                    {brochures.map((brochure) => (
+                      <SelectItem key={brochure.id} value={String(brochure.id)}>
+                        {brochure.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -129,7 +127,7 @@ export function BrochureForm({
 
           <Button
             type="submit"
-            className="w-full bg-[#333] hover:bg-[#D4AF37] text-white py-6 uppercase tracking-[0.2em] text-[10px] font-bold transition-all duration-500 mt-8"
+            className="w-full bg-expery-blue hover:bg-expery-iron text-white py-6 uppercase tracking-widest text-xs font-bold transition-all mt-6 cursor-pointer"
           >
             Enviar Brochure
           </Button>

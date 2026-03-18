@@ -1,13 +1,12 @@
 "use client"
 import { motion } from "framer-motion";
-import { Share2, MessageCircle } from "lucide-react";
+import { Share2, MessageCircle, Focus } from "lucide-react";
 import { HomeData } from "@/types/home";
 
 const IconMap = {
-  instagram: Share2,
+  instagram: Focus,
   facebook: Share2,
   whatsapp: MessageCircle,
-  linkedin: Share2
 };
 
 export function ContactSection({ data }: Readonly<{ data: HomeData['contact'] }>) {
@@ -45,7 +44,7 @@ export function ContactSection({ data }: Readonly<{ data: HomeData['contact'] }>
             {/* Redes Sociales */}
             <div className="flex flex-col gap-4 items-start w-fit">
               {data.socials.map((social) => {
-                const Icon = IconMap[social.platform];
+                const Icon = IconMap[social.platform as keyof typeof IconMap];
                 return (
                   <a 
                     key={social.platform}

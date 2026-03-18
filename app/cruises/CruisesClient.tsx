@@ -8,9 +8,10 @@ import type { Cruise } from "@prisma/client";
 
 interface Props {
   readonly cruises: readonly Cruise[];
+  readonly selector: readonly { title: string }[];
 }
 
-export function CruisesClient({ cruises }: Props) {
+export function CruisesClient({ cruises, selector }: Props) {
   const [activeForm, setActiveForm] = useState<"contact" | null>(null);
   const closeForm = () => setActiveForm(null);
 
@@ -41,7 +42,7 @@ export function CruisesClient({ cruises }: Props) {
         onClose={closeForm}
         text="Nuestros asesores estarán encantados de ponerse en contacto contigo"
       >
-        <ContactForm selectorKey="cruises" />
+        <ContactForm type="cruise" selector={selector} />
       </FormSidebar>
     </div>
   );

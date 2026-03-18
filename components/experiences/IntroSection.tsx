@@ -22,7 +22,7 @@ export function IntroSection({
             animate={{ opacity: 1, x: 0 }}
             className="w-full mb-12 flex flex-col items-center"
           >
-            <div className="inline-block border border-classic-gold px-6 py-2 mb-6 w-fit">
+            <div className="inline-block border border-classic-gold px-6 py-2 mb-6 w-fit rounded">
               <span className="text-classic-gold font-medium uppercase tracking-widest text-sm">
                 {data.daysNights}
               </span>
@@ -44,7 +44,7 @@ export function IntroSection({
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-black/40 flex items-end p-4">
+              <div className="absolute inset-0 bg-black/20 flex items-end p-4">
                 <button
                   onClick={onOpenContact}
                   className="w-full py-3 bg-white text-xs uppercase tracking-tighter font-bold hover:bg-classic-gold hover:text-white transition-all hover:cursor-pointer rounded"
@@ -60,7 +60,7 @@ export function IntroSection({
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-black/40 flex items-end p-4">
+              <div className="absolute inset-0 bg-black/20 flex items-end p-4">
                 <button
                   onClick={onOpenBrochure}
                   className="w-full py-3 bg-white text-xs uppercase tracking-tighter font-bold hover:bg-classic-gold hover:text-white transition-all hover:cursor-pointer rounded"

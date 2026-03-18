@@ -11,7 +11,7 @@ export function HeroSection({ data }: Readonly<{ data: HomeData["hero"] }>) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.3, 0.6, 0.3], x: [0, 50, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
         className="absolute inset-0 bg-linear-to-b from-transparent via-slate-300 to-slate-900 opacity-60 pointer-events-none"
       />
 
@@ -19,7 +19,7 @@ export function HeroSection({ data }: Readonly<{ data: HomeData["hero"] }>) {
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 4, ease: "easeOut" }}
+        transition={{ duration: 3, ease: "easeOut" }}
         className="relative z-10 w-screen h-screen scale-110"
       >
         <Image

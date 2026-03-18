@@ -9,7 +9,7 @@ datasource db {
 // Para textos fijos del Home y Globales
 model PageSettings {
   id    String @id @default("home")
-  data  Json   // Aquí guardamos el objeto de Hero, Contacto, etc.
+  data  Json
 }
 
 model Experience {
@@ -22,14 +22,14 @@ model Experience {
   itinerary    Json     // Mapa, salida/llegada, imagen principal
   amenities    Json     // Inclusiones, comodidades, requisitos
   createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  updatedAt    DateTime? @updatedAt
 }
 
 model Cruise {
   id          String   @id @default(cuid())
   name        String
   description String
-  imageUrl    String   // URL de Vercel Blob
+  imageUrl    String
   ctaText     String
   externalLink String
   order       Int      @default(0)
@@ -39,19 +39,26 @@ model Lead {
   id                String   @id @default(cuid())
   nombre            String
   apellido          String
-  email             String   @unique
+  email             String
   fechaNacimiento   String   // Guardado como string para coincidir con el input type="date"
   celular           String?  // Opcional en tu formulario
   interesSeleccionado String   // Guardará el valor de "Experiencia" o "Crucero"
-  tipoInteres       String   // Guardará si fue "experiences" o "cruises"
   createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  updatedAt         DateTime? @updatedAt
 }
 
 model PotentialLead {
   id                String   @id @default(cuid())
   nombre            String
   email             String
-  brochureId        String
+  brochureId        Int
   fechaNotificacion DateTime @default(now())
+}
+
+model Brochure {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  fileUrl     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
 }

@@ -8,12 +8,19 @@ import { Experience } from "@/types/experience";
 export function ExperienceCard({
   exp,
   index,
+  span,
 }: {
   readonly exp: Experience;
   readonly index: number;
+  readonly span: number;
 }) {
-  // Si es la principal (Featured), usamos clases diferentes
+  const colSpanMap: Record<number, string> = {
+    2: "md:col-span-2",
+    3: "md:col-span-3",
+  };
+
   const isFeatured = exp.isFeatured;
+  const gridStyle = isFeatured ? "md:col-span-6 h-[80vh]" : `${colSpanMap[span]} h-[60vh]`;
 
   return (
     <motion.div
@@ -21,13 +28,13 @@ export function ExperienceCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.6 }}
       viewport={{ once: true }}
-      className={`relative overflow-hidden rounded group min-h-100 
-                ${isFeatured ? "md:col-span-6 h-125" : "md:col-span-3 lg:col-span-2 h-112.5"}`}
+      className={`relative overflow-hidden rounded group ${gridStyle}`}
     >
       {/* Imagen de Fondo */}
       <Image
         src={exp.imageUrl}
         alt={exp.title}
+        loading="eager"
         fill
         className="object-cover transition-transform duration-1000 group-hover:scale-110"
       />

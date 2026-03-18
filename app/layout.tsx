@@ -18,7 +18,35 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Expery Travel",
-  description: "Agencia de viajes de lujo. Explora destinos mágicos con experiencias personalizadas y servicios exclusivos.",
+  description:
+    "Explora el lujo de viajar con Expery Travel: cruceros exclusivos, destinos de ensueño y experiencias personalizadas.",
+  openGraph: {
+    title: "Expery Travel - El arte de viajar",
+    description:
+      "Descubre cruceros exclusivos y experiencias personalizadas con Expery Travel.",
+    url: "https://experytravel.com",
+    siteName: "Expery Travel",
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Expery Travel - El arte de viajar",
+    description: "Descubre cruceros exclusivos y experiencias personalizadas.",
+    site: "@experytravel",
+    images: ["https://experytravel.com/twitter-image.jpg"],
+  },
+  keywords: [
+    "cruceros de lujo",
+    "viajes exclusivos",
+    "Expery Travel",
+    "destinos de ensueño",
+    "servicio premium",
+    "viajes premium",
+    "experiencias personalizadas",
+  ],
+  robots: "index, follow",
+  authors: [{ name: "Expery Travel", url: "https://experytravel.com" }],
 };
 
 export default function RootLayout({
