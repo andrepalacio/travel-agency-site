@@ -110,9 +110,6 @@ export function BrochureForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">
-                      Brochure general de Expery Travel
-                    </SelectItem>
                     {brochures.map((brochure) => (
                       <SelectItem key={brochure.id} value={String(brochure.id)}>
                         {brochure.name}

@@ -20,11 +20,12 @@ export default async function HomePage() {
     );
   }
   const { hero, services, contact } = data;
+  const brochures = await prisma.brochure.findMany({ select: { id: true, name: true } });
 
   return (
     <div className="relative min-h-screen">
       <main>
-        <HeroSection data={hero} />
+        <HeroSection data={hero} brochures={brochures} />
         <ServicesSection data={services} />
         <ContactSection data={contact} />
       </main>

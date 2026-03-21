@@ -1,10 +1,23 @@
 "use client";
+
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { HomeData } from "@/types/home";
+import { FormSidebar } from "@/components/forms/FormSidebar";
+import { BrochureForm } from "@/components/forms/BrochureForm";
 
-export function HeroSection({ data }: Readonly<{ data: HomeData["hero"] }>) {
+export function HeroSection({
+  data,
+  brochures,
+}: Readonly<{
+  data: HomeData["hero"];
+  brochures: readonly { id: number; name: string }[];
+}>) {
+  const [activeForm, setActiveForm] = useState<"brochure" | null>(null);
+  const closeForm = () => setActiveForm(null);
+
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black flex items-center justify-center">
       {/* 1. Fondo: Polvo Estelar (Animación simple de estela) */}
@@ -40,13 +53,21 @@ export function HeroSection({ data }: Readonly<{ data: HomeData["hero"] }>) {
         >
           Explorar
         </Link>
-        <Link
-          href={data.infoLink}
-          className="text-white border-b border-white hover:opacity-70 transition-opacity uppercase tracking-widest text-sm md:text-base"
+        <button
+          onClick={() => setActiveForm("brochure")}
+          className="text-white border-b border-white hover:opacity-70 transition-opacity uppercase tracking-widest text-sm md:text-base bg-transparent cursor-pointer"
         >
           Solicita más información
-        </Link>
+        </button>
       </div>
+
+      <FormSidebar
+        isOpen={activeForm === "brochure"}
+        onClose={closeForm}
+        text="Recibe a tu correo electrónico el brochure de tu experiencia de interés"
+      >
+        <BrochureForm brochures={brochures} />
+      </FormSidebar>
     </section>
   );
 }
