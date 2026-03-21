@@ -7,11 +7,15 @@ import { useEditor } from "@/context/EditorContext";
 
 export function HomePreview() {
   const { data } = useEditor();
+  const brochures = [
+    { id: 1, name: "Brochure Caribe" },
+    { id: 2, name: "Brochure Mediterráneo" }
+  ] as const;
   return (
     <div className="w-full h-full overflow-y-auto bg-white">
       <NavBar />
       <main>
-        <HeroSection data={data.hero} />
+        <HeroSection data={data.hero} brochures={brochures}/>
         <ServicesSection data={data.services} />
         <ContactSection data={data.contact} />
       </main>
