@@ -1,7 +1,12 @@
 "use client";
 import { use, useEffect, useState } from "react";
 import { Menu, Phone } from "lucide-react";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -44,7 +49,7 @@ export function NavBar() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 flex justify-between items-center p-4 text-white transition-transform duration-300 ${bgClass} ${
+      className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 py-6 text-white transition-transform duration-300 ${bgClass} ${
         visible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -57,8 +62,16 @@ export function NavBar() {
           side="left"
           className="w-72 bg-expery-blue text-white border-none"
         >
-          <SheetTitle></SheetTitle>
-          <div className="flex flex-col gap-8 mt-16 text-xl text-center">
+          <SheetTitle className="flex w-full justify-center mt-8">
+            <Image
+              src="/logos/original_white.png"
+              alt="Logo"
+              width={160}
+              height={90}
+              loading="eager"
+            />
+          </SheetTitle>
+          <div className="flex flex-col gap-8 mt-4 text-xl text-center">
             <Link href="/">Inicio</Link>
             <Link href="/cruises">Cruceros</Link>
             <Link href="/experiences">Experiencias</Link>
@@ -67,18 +80,25 @@ export function NavBar() {
       </Sheet>
 
       {/* CENTRO: Logo */}
-        <Link href="/">
-          <Image
-            src="/logos/original_white.png"
-            alt="Logo"
-            width={180}
-            height={90}
-            loading="eager"
-          />
-        </Link>
+      <Link href="/">
+        <Image
+          src="/logos/original_white.png"
+          alt="Logo"
+          width={180}
+          height={90}
+          loading="eager"
+        />
+      </Link>
 
       {/* DERECHA: Soporte */}
-      <button onClick={() => toast("Línea móvil: +57 3122802986", { position: "top-center", duration: 5000 })}>
+      <button
+        onClick={() =>
+          toast("Línea móvil: +57 3122802986", {
+            position: "top-center",
+            duration: 5000,
+          })
+        }
+      >
         <Phone className="w-6 h-6 mr-8" />
       </button>
     </nav>

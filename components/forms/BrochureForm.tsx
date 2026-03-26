@@ -124,7 +124,7 @@ export function BrochureForm({
 
           <Button
             type="submit"
-            className="w-full bg-expery-blue hover:bg-expery-iron text-white py-6 uppercase tracking-widest text-xs font-bold transition-all mt-6 cursor-pointer"
+            className="w-full btn-primary"
           >
             Enviar Brochure
           </Button>

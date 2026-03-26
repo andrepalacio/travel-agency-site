@@ -12,14 +12,14 @@ export function ExperiencesClient({ experiences }: Props) {
   const numColSpan = (experiences.length === 5 || experiences.length === 3) ? 3 : 2;
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-6 md:px-20">
-      <div className="max-w-7xl mx-auto">
+    <div className="section-container-tight">
+      <div className="section-content-wrapper">
         
         <header className="mb-16">
           <div>
-            <h1 className="text-6xl font-bold tracking-tighter">Experiencias</h1>
+            <h1 className="title-h1">Experiencias</h1>
             <motion.div 
-              className="w-20 h-1 bg-black mt-4"
+              className="divider-bar"
               animate={{ width: [80, 310, 80] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -27,7 +27,7 @@ export function ExperiencesClient({ experiences }: Props) {
         </header>
 
         {/* Grilla Dinámica */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+        <div className="grid-responsive">
           {experiences.map((exp, index) => (
             <ExperienceCard 
               key={exp.id} 

@@ -19,13 +19,13 @@ export function HeroSection({
   const closeForm = () => setActiveForm(null);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black flex items-center justify-center">
+    <section className="hero-container">
       {/* 1. Fondo: Polvo Estelar (Animación simple de estela) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.3, 0.6, 0.3], x: [0, 50, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 bg-linear-to-b from-transparent via-slate-300 to-slate-900 opacity-60 pointer-events-none"
+        className="card-overlay-gradient"
       />
 
       {/* 2. Imagen del Crucero (Estático pero con entrada suave) */}
@@ -49,13 +49,13 @@ export function HeroSection({
       <div className="absolute bottom-10 right-10 flex gap-8 z-20">
         <Link
           href={data.exploreLink}
-          className="text-white border-b border-white hover:opacity-70 transition-opacity uppercase tracking-widest text-sm md:text-base"
+          className="btn-link"
         >
           Explorar
         </Link>
         <button
           onClick={() => setActiveForm("brochure")}
-          className="text-white border-b border-white hover:opacity-70 transition-opacity uppercase tracking-widest text-sm md:text-base bg-transparent cursor-pointer"
+          className="btn-link-transparent"
         >
           Solicita más información
         </button>

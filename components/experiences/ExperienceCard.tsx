@@ -28,34 +28,40 @@ export function ExperienceCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.6 }}
       viewport={{ once: true }}
-      className={`relative overflow-hidden rounded group ${gridStyle}`}
+      className={`card-minimal group ${gridStyle}`}
     >
       {/* Imagen de Fondo */}
-      <Image
-        src={exp.imageUrl}
-        alt={exp.title}
-        loading="eager"
-        fill
-        className="object-cover transition-transform duration-1000 group-hover:scale-110"
-      />
+      <Link
+        href={`/experiences/${exp.slug}`}
+        className="absolute inset-0 block cursor-default"
+        aria-label={`Ir a la experiencia ${exp.title}`}
+      >
+        <Image
+          src={exp.imageUrl}
+          alt={exp.title}
+          loading="eager"
+          fill
+          className="card-image-hover"
+        />
+      </Link>
 
       {/* Overlay Gradiente */}
-      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+      <div className="card-overlay pointer-events-none" />
 
       {/* Contenido */}
-      <div className="absolute inset-0 p-8 flex flex-col justify-end">
+      <div className="card-absolute-content pointer-events-none">
         <h3
-          className={`text-white font-bold tracking-tighter mb-6 max-w-md
+          className={`title-white mb-6 max-w-md
                     ${isFeatured ? "text-4xl" : "text-2xl"}`}
         >
           {exp.title}
         </h3>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end pointer-events-auto">
           <Link href={`/experiences/${exp.slug}`}>
             <motion.button
               whileHover={{ x: 5 }}
-              className="flex items-center gap-2 text-white border-b border-white/50 pb-1 text-sm uppercase tracking-widest hover:border-white transition-colors"
+              className="btn-link-with-icon cursor-pointer"
             >
               Conoce más
               <ArrowRight size={16} />

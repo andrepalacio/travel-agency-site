@@ -4,7 +4,7 @@ import { DetailedExperience } from "@/types/experience";
 export function ItinerarySection({ data }: Readonly<{ data: DetailedExperience['itinerary'] }>) {
   return (
     <section className="bg-slate-50 py-20 px-6 md:px-20">
-      <div className="max-w-5xl mx-auto text-center">
+      <div className="section-container-narrow text-center">
         <p className="text-classic-gold uppercase tracking-[0.3em] font-bold mb-8">{data.goldMessage}</p>
         <div className="relative h-125 w-full rounded overflow-hidden mb-12">
           <Image src={data.mainImage} alt="Travel" fill className="object-cover" />
