@@ -16,17 +16,17 @@ export function CruisesClient({ cruises, selector }: Props) {
   const closeForm = () => setActiveForm(null);
 
   return (
-    <div className="min-h-screen">
-      <header className="pt-28 pb-20 text-center">
-        <h1 className="text-6xl font-bold tracking-tighter">
+    <div className="min-section">
+      <header className="section-container-minimal">
+        <h1 className="title-h1">
           Navieras de Lujo
         </h1>
-        <p className="text-expery-iron mt-4 tracking-widest text-xl">
+        <p className="title-secondary mt-4">
           Ingeniería de vanguardia para exploradores modernos
         </p>
       </header>
 
-      <main className="pb-20">
+      <main>
         {cruises.map((cruise, index) => (
           <CruiseCard
             key={cruise.id}

@@ -11,11 +11,11 @@ export function AmenitiesSection({
   readonly onOpenContact: () => void;
 }) {
   return (
-    <section className="py-24 px-6 md:px-20 max-w-7xl mx-auto space-y-32">
+    <section className="section-container section-content-wrapper space-y-32">
       {/* PARTE 1: Habitación */}
-      <div className="grid md:grid-cols-2 gap-16 items-center">
+      <div className="two-column-grid md:grid-cols-2">
         <div className="order-2 md:order-1">
-          <h2 className="text-3xl font-bold uppercase mb-8 tracking-tighter italic border-l-4 border-[#D4AF37] pl-4">
+          <h2 className="title-h3 uppercase mb-8 italic border-l-4 border-[#D4AF37] pl-4">
             {data.roomTitle}
           </h2>
           <ul className="grid grid-cols-1 gap-4">
@@ -42,10 +42,10 @@ export function AmenitiesSection({
       {/* PARTE 2: Incluye + Grilla 6 Fotos */}
       <div className="space-y-12">
         <div className="text-center">
-          <h2 className="text-4xl font-bold uppercase mb-4 italic">
+          <h2 className="title-h3 uppercase mb-4 italic">
             {data.includesTitle}
           </h2>
-          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-12" />
+          <div className="title-underline mb-12" />
         </div>
 
         <div className="relative h-150 rounded-[2rem] overflow-hidden group">
@@ -55,7 +55,7 @@ export function AmenitiesSection({
             fill
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
+          <div className="card-overlay-dark" />
           <div className="absolute bottom-12 left-12 right-12">
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-6 text-white text-sm font-medium">
               {data.includesList.map((li: string, i: number) => (
@@ -125,7 +125,7 @@ export function AmenitiesSection({
           </p>
           <Button
             onClick={onOpenContact}
-            className="bg-classic-gold hover:bg-white hover:text-black text-black px-10 py-8 rounded-full uppercase tracking-widest font-bold transition-all duration-300 ease-in-out text-xs"
+            className="btn-secondary-gold px-10 py-8 text-xs"
           >
             Contacta con un asesor
           </Button>

@@ -25,8 +25,8 @@ export function DetailExperienceClient({
 
   return (
     <>
-      <header className="pt-28 pb-8 text-center">
-        <h1 className="text-5xl text-expery-blue font-bold tracking-tighter">
+      <header className="section-container-minimal">
+        <h1 className="title-h2-blue">
           {experience.title}
         </h1>
       </header>

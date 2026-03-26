@@ -15,7 +15,7 @@ export default async function HomePage() {
   if (!data) {
     return (
       <main>
-        <p className="text-center py-12">No fue posibles cargar la información de la página principal. Por favor, intente nuevamente más tarde.</p>
+        <p className="section-subtitle">No fue posibles cargar la información de la página principal. Por favor, intente nuevamente más tarde.</p>
       </main>
     );
   }

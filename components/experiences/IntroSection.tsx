@@ -13,9 +13,8 @@ export function IntroSection({
   readonly onOpenBrochure: () => void;
 }) {
   return (
-    <section className="pb-20 px-6 md:px-20 w-full">
-      <div className="max-w-7xl mx-auto w-full">
-        <div className="flex flex-col items-center w-full">
+    <section className="px-16 section-content-wrapper">
+      <div className="flex flex-col items-center w-full">
           {/* Textos */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -71,7 +70,6 @@ export function IntroSection({
             </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
