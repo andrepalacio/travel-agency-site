@@ -1,63 +1,138 @@
-"use client"
-import { useState } from "react";
-import { uploadImage } from "@/app/admin/actions/upload";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { UploadCloud, CheckCircle2, Loader2 } from "lucide-react";
-import Image from "next/image";
+"use client";
 
-export function ImageUploader({ onUploadComplete, currentImage }: { 
-  onUploadComplete: (url: string) => void,
-  currentImage?: string 
-}) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [preview, setPreview] = useState(currentImage);
+import { useId, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { UploadCloud, Loader2, X } from "lucide-react";
+
+type ImageUploaderProps = {
+  value: string;
+  onChange: (url: string) => void;
+  label: string;
+};
+
+async function compressImage(file: File): Promise<string> {
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("No se pudo leer el archivo."));
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("No se pudo cargar la imagen."));
+    img.src = dataUrl;
+  });
+
+  const maxWidth = 1200;
+  const scale = image.width > maxWidth ? maxWidth / image.width : 1;
+  const targetWidth = Math.round(image.width * scale);
+  const targetHeight = Math.round(image.height * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("No se pudo inicializar el canvas.");
+  }
+
+  ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+  const preferredType = "image/webp";
+  const fallbackType = "image/jpeg";
+
+  let compressed = canvas.toDataURL(preferredType, 0.8);
+  if (!compressed.startsWith("data:image/webp")) {
+    compressed = canvas.toDataURL(fallbackType, 0.8);
+  }
+
+  return compressed;
+}
+
+export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const inputId = useId();
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append("image", file);
-
     try {
-      const url = await uploadImage(formData); // Nuestra Server Action
-      setPreview(url);
-      onUploadComplete(url);
+      setIsProcessing(true);
+      const compressedUrl = await compressImage(file);
+      onChange(compressedUrl);
     } catch (error) {
-      console.error("Error subiendo imagen:", error);
+      console.error("Error al procesar la imagen:", error);
     } finally {
-      setIsUploading(false);
+      setIsProcessing(false);
+      e.target.value = "";
     }
   };
 
   return (
-    <div className="space-y-4 border-2 border-dashed border-slate-200 rounded-xl p-6 text-center">
-      {preview ? (
-        <div className="relative h-40 w-full rounded-lg overflow-hidden group">
-          <Image src={preview} alt="Preview" fill className="object-cover" />
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-             <label className="cursor-pointer text-white text-xs font-bold uppercase tracking-widest">
-                Cambiar Imagen
-                <input type="file" className="hidden" onChange={handleFileChange} />
-             </label>
-          </div>
-        </div>
-      ) : (
-        <label className="flex flex-col items-center justify-center cursor-pointer gap-2">
-          <UploadCloud className="h-10 w-10 text-slate-300" />
-          <span className="text-xs text-slate-500 uppercase tracking-widest font-bold">
-            Subir Imagen de la Experiencia
-          </span>
-          <input type="file" className="hidden" onChange={handleFileChange} />
-        </label>
-      )}
+    <div className="space-y-3">
+      <label htmlFor={inputId} className="text-sm font-medium text-slate-700">
+        {label}
+      </label>
 
-      {isUploading && (
-        <div className="flex items-center justify-center gap-2 text-indigo-600 animate-pulse">
+      <div
+        className={`rounded-xl p-4 ${
+          value
+            ? "border border-slate-200 bg-slate-50"
+            : "border-2 border-dashed border-slate-300 bg-white"
+        }`}
+      >
+        {value ? (
+          <div className="space-y-3">
+            <div className="relative h-48 w-full overflow-hidden rounded-lg bg-slate-100">
+              <img src={value} alt={label} className="h-full w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => onChange("")}
+                className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white transition hover:bg-black/75"
+                aria-label="Eliminar imagen"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <label htmlFor={inputId}>
+              <Button type="button" variant="outline" className="w-full cursor-pointer" asChild>
+                <span>
+                  <UploadCloud className="mr-2 h-4 w-4" />
+                  Cambiar imagen
+                </span>
+              </Button>
+            </label>
+          </div>
+        ) : (
+          <label
+            htmlFor={inputId}
+            className="flex min-h-40 cursor-pointer flex-col items-center justify-center gap-2 text-slate-500"
+          >
+            <UploadCloud className="h-9 w-9 text-slate-400" />
+            <span className="text-sm font-medium">Subir imagen</span>
+            <span className="text-xs text-slate-400">Se comprimirá automáticamente (máx. 1200px)</span>
+          </label>
+        )}
+
+        <input
+          id={inputId}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+          disabled={isProcessing}
+        />
+      </div>
+
+      {isProcessing && (
+        <div className="flex items-center gap-2 text-sm text-indigo-600">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-[10px] font-bold uppercase tracking-widest">Procesando en la nube...</span>
+          <span>Procesando imagen...</span>
         </div>
       )}
     </div>
