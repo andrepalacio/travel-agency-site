@@ -3,6 +3,8 @@ import { ServicesSection } from "@/components/home/ServicesSection";
 import { ContactSection } from "@/components/home/ContactSection";
 import prisma from "@/lib/prisma";
 import { HomeDataSchema } from "@/schemas/page-settings";
+import { NavBar } from "@/components/global/NavBar";
+import { Footer } from "@/components/global/Footer";
 
 async function getHomeData() {
   const raw = await prisma.pageSettings.findFirst({ where: { id: "home" } });
@@ -24,11 +26,13 @@ export default async function HomePage() {
 
   return (
     <div className="relative min-h-screen">
+      <NavBar />
       <main>
         <HeroSection data={hero} brochures={brochures} />
         <ServicesSection data={services} />
         <ContactSection data={contact} />
       </main>
+      <Footer />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { NavBar } from "@/components/global/NavBar";
 import { Footer } from "@/components/global/Footer";
 import { HeroSection } from "@/components/home/HeroSection";

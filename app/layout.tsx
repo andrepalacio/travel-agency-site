@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Gelasio, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NavBar } from "@/components/global/NavBar";
-import { Footer } from "@/components/global/Footer";
 import { Toaster } from "@/components/ui/sonner";
 
 const gelasio = Gelasio({
@@ -59,12 +57,8 @@ export default function RootLayout({
       <body
         className={`${gelasio.variable} ${geistMono.variable} antialiased bg-white/80`}
       >
-        {/* Navegación Global */}
-        <NavBar />
         {children}
         <Toaster />
-        {/* Pie de página con enlaces legales */}
-        <Footer />
       </body>
     </html>
   );
