@@ -4,5 +4,4 @@ export interface CruiseCardData {
   description: string;
   imageUrl: string;
   ctaText: string;
-  externalLink: string;
 }

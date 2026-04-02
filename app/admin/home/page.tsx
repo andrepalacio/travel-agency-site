@@ -10,8 +10,8 @@ export default async function AdminHomePage() {
   if (!pageSettings) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold">Edición Home</h1>
-        <p className="mt-4 text-slate-600">No hay configuración para Home.</p>
+        <h1 className="title-h3 text-expery-blue">Edición Home</h1>
+        <p className="mt-4 text-expery-iron">No hay configuración para Home.</p>
       </div>
     );
   }
@@ -21,7 +21,7 @@ export default async function AdminHomePage() {
   if (!parsedData.success) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold">Edición Home</h1>
+        <h1 className="title-h3 text-expery-blue">Edición Home</h1>
         <p className="mt-4 text-red-600">
           La configuración de Home existe, pero no tiene el formato esperado.
         </p>
@@ -33,7 +33,7 @@ export default async function AdminHomePage() {
 
   return (
     <div className="mx-auto max-w-5xl p-6">
-      <h1 className="mb-6 text-3xl font-bold tracking-tight">Edición del Home</h1>
+      <h1 className="title-h3 text-expery-blue mb-6">Edición del Home</h1>
       <HomeEditorForm initialData={homeData} />
     </div>
   );

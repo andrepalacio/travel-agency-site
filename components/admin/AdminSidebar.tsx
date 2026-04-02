@@ -1,65 +1,38 @@
 "use client";
-import { useEditor } from "@/context/EditorContext";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion";
-import { SaveButton } from "./SaveButton";
-import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function AdminSidebar() {
-  const { data, updateSection } = useEditor();
+  const pathname = usePathname();
+
+  const sections = [
+    { name: "Inicio", href: "/admin/home" },
+    { name: "Cruceros", href: "/admin/cruises" },
+    { name: "Experiencias", href: "/admin/experiences" },
+    { name: "Usuarios", href: "/admin/users" },
+  ];
 
   return (
-    <div className="space-y-6">
-      <SaveButton />
-      <Separator />
-
-      {/* Aquí van tus Accordions de Hero, Services, etc. */}
-      <div className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
-        Secciones de la página
-      </div>
-      <Accordion type="single" collapsible className="w-full">
-        {/* Edición de Hero */}
-        <AccordionItem value="hero">
-          <AccordionTrigger>Sección Hero</AccordionTrigger>
-          <AccordionContent className="space-y-4 pt-2">
-            <div className="space-y-2">
-              <Label>URL de la Imagen del Crucero</Label>
-              <Input
-                value={data.hero.shipImageUrl}
-                onChange={(e) =>
-                  updateSection("hero", { shipImageUrl: e.target.value })
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        {/* Edición de Servicios */}
-        <AccordionItem value="services">
-          <AccordionTrigger>Sección Servicios</AccordionTrigger>
-          <AccordionContent className="space-y-4 pt-2">
-            <div className="space-y-2">
-              <Label>Título de la sección</Label>
-              <Input
-                value={data.services.title}
-                onChange={(e) =>
-                  updateSection("services", { title: e.target.value })
-                }
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Descripción corta</Label>
-              <Input
-                value={data.services.description}
-                onChange={(e) =>
-                  updateSection("services", { description: e.target.value })
-                }
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
+    <nav className="space-y-1">
+      {sections.map((section) => {
+        const isActive = pathname === section.href || pathname?.startsWith(section.href + "/");
+        return (
+          <Link
+            key={section.name}
+            href={section.href}
+            className={`
+              flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+              transition-all duration-200
+              ${isActive
+                ? "bg-white/15 text-classic-gold border-l-2 border-classic-gold"
+                : "text-white/80 hover:bg-white/10 hover:text-white"
+              }
+            `}
+          >
+            {section.name}
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

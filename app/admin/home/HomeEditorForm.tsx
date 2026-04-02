@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeDataSchema, type HomeData } from "@/schemas/page-settings";
-import { saveHomeContent } from "@/app/admin/actions/actions";
+import { saveHomeContent } from "./actions";
 
 type HomeEditorFormProps = {
   initialData: HomeData;
@@ -87,7 +87,10 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
         <div className="mt-5 space-y-4">
           <h3 className="text-base font-semibold">Cards</h3>
           {initialData.services.cards.map((_, index) => (
-            <div key={index} className="grid gap-4 rounded-md border p-4 md:grid-cols-3">
+            <div
+              key={index}
+              className="grid gap-4 rounded-md border p-4 md:grid-cols-3"
+            >
               <label className="flex flex-col gap-2 text-sm font-medium">
                 ID
                 <input
@@ -153,7 +156,10 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
         <div className="mt-5 space-y-4">
           <h3 className="text-base font-semibold">Socials</h3>
           {initialData.contact.socials.map((_, index) => (
-            <div key={index} className="grid gap-4 rounded-md border p-4 md:grid-cols-3">
+            <div
+              key={index}
+              className="grid gap-4 rounded-md border p-4 md:grid-cols-3"
+            >
               <label className="flex flex-col gap-2 text-sm font-medium">
                 Platform
                 <input
@@ -193,7 +199,9 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
         >
           {isPending ? "Guardando..." : "Guardar cambios"}
         </button>
-        {statusMessage ? <p className="text-sm text-slate-700">{statusMessage}</p> : null}
+        {statusMessage ? (
+          <p className="text-sm text-slate-700">{statusMessage}</p>
+        ) : null}
       </div>
     </form>
   );

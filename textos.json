@@ -1,0 +1,249 @@
+{
+  "experiences": [
+    {
+      "slug": "crucero-sudeste-asiatico-2026",
+      "title": "Crucero Sudeste Asiático 2026",
+      "isFeatured": true,
+      "imageUrl": "/crucero-sudeste-asiatico.jpg",
+      "intro": {
+        "slogan": "Vive el Sudeste Asiático como siempre lo soñaste... con el lujo que mereces",
+        "daysNights": "11 Días / 10 Noches",
+        "description": "Explora culturas milenarias, templos fascinantes, sabores exóticos y ciudades vibrantes en un recorrido inolvidable desde Bangkok hasta Singapur. Disfruta el exclusivo servicio de Oceania Cruises a bordo del elegante Nautica, reconocido por su gastronomía gourmet, atención personalizada y experiencias únicas.",
+        "imageLeft": "/bangkok-tailandia.jpg",
+        "imageRight": "/singapur.jpg"
+      },
+      "itinerary": {
+        "goldMessage": "Déjate llevar por la magia de Asia mientras nosotros nos encargamos de tu comodidad total",
+        "mainImage": "/nautica-pool-deck.jpg",
+        "departure": "Bangkok, Tailandia — 13 noviembre 2026",
+        "arrival": "Singapur — 23 noviembre 2026",
+        "mapImage": "/mapa-sudeste-asiatico.jpg",
+        "stops": [
+          { "name": "Bangkok",          "lat": 13.7563, "lng": 100.5018 },
+          { "name": "Ko Samui",         "lat": 9.5120,  "lng": 100.0136 },
+          { "name": "Ho Chi Minh City", "lat": 10.8231, "lng": 106.6297 },
+          { "name": "Kota Kinabalu",    "lat": 5.9804,  "lng": 116.0735 },
+          { "name": "Muara",            "lat": 5.0260,  "lng": 115.0670 },
+          { "name": "Singapur",         "lat": 1.3521,  "lng": 103.8198 }
+        ]
+      },
+      "amenities": {
+        "roomTitle": "Comodidades de la Habitación con Varanda",
+        "roomList": [
+          "Ultra Tranquility Bed® exclusivo",
+          "Terraza privada en teca",
+          "Servicio de limpieza dos veces al día",
+          "Room service 24 horas",
+          "Chocolates belgas en servicio nocturno",
+          "Lujosas toallas y batas de algodón, pantuflas",
+          "Amenities Bulgari",
+          "Secador de cabello",
+          "Internet inalámbrico",
+          "Escritorio y papelería",
+          "TV de pantalla plana con señal satelital",
+          "Reproductor de DVD",
+          "Caja de seguridad"
+        ],
+        "roomImage": "/habitacion-varanda.jpg",
+        "conciergeTitle": "Privilegios Concierge — Exclusivos",
+        "conciergeList": [
+          "Servicio de lavandería de cortesía (hasta 3 bolsas por camarote)",
+          "Menú extendido del Grand Dining Room para almuerzo y cena",
+          "Embarque prioritario al mediodía",
+          "Botella de champagne de bienvenida",
+          "Reservas prioritarias en restaurantes especializados",
+          "Acceso ilimitado a la Terraza del Aquamar Spa",
+          "iPad® disponible a solicitud",
+          "Bolso especial con logo de Oceania Cruises"
+        ],
+        "includesTitle": "¿Qué incluye tu crucero?",
+        "includesImage": "/gastronomia-crucero.jpg",
+        "includesList": [
+          "Restaurantes gourmet de especialidades",
+          "WiFi Starlink® ilimitado",
+          "Propinas a bordo",
+          "Comidas en suite y camarote",
+          "Refrescos, cafés y tés especiales",
+          "Tradicional 'Tarde del Té' con delicias de repostería",
+          "Vero Water® con y sin gas",
+          "Jugos, batidos y helados gourmet",
+          "Vinos, champagne y cervezas House Select en almuerzos y cenas",
+          "Clases grupales de fitness",
+          "Servicio de lavandería para categorías Concierge",
+          "Seguro de viaje y cancelación"
+        ],
+        "notIncludedList": [
+          "Tiquetes aéreos",
+          "Excursiones en los puertos",
+          "Servicios terrestres pre o post crucero",
+          "Seguros adicionales de cancelación o asistencia médica",
+          "Gastos personales como estética, peluquería, spa, casino y otros no mencionados"
+        ],
+        "requirementsList": [
+          "Pasaporte con vigencia mínima de 6 meses al finalizar el viaje",
+          "Visa requerida para: Singapur, Vietnam, Malasia y Brunei"
+        ]
+      }
+    },
+    {
+      "slug": "safari-kenia-2026",
+      "title": "Safari & Reservas Naturales de Kenia 2026",
+      "isFeatured": true,
+      "imageUrl": "/kenia-safari-hero.jpg",
+      "intro": {
+        "slogan": "Donde la naturaleza salvaje te roba el aliento y el alma",
+        "daysNights": "10 Días / 9 Noches",
+        "description": "Adéntrate en el corazón del África salvaje a bordo de vehículos 4x4 de lujo. Desde las llanuras infinitas del Masái Mara hasta las orillas del lago Nakuru, cada amanecer trae consigo el espectáculo más grandioso de la naturaleza: leones, elefantes, jirafas y la mítica Gran Migración en su hábitat natural.",
+        "imageLeft": "/nairobi-city.jpg",
+        "imageRight": "/masai-mara-atardecer.jpg"
+      },
+      "itinerary": {
+        "goldMessage": "El África salvaje te espera — cada día es una historia que no encontrarás en ningún otro lugar del mundo",
+        "mainImage": "/safari-4x4-kenia.jpg",
+        "departure": "Nairobi, Kenia — 15 julio 2026",
+        "arrival": "Nairobi, Kenia — 24 julio 2026",
+        "mapImage": "/mapa-kenia.jpg",
+        "stops": [
+          { "name": "Nairobi",       "lat": -1.2921, "lng": 36.8219 },
+          { "name": "Masái Mara",    "lat": -1.5167, "lng": 35.1500 },
+          { "name": "Lago Nakuru",   "lat": -0.3031, "lng": 36.0800 },
+          { "name": "Amboseli",      "lat": -2.6527, "lng": 37.2606 },
+          { "name": "Samburu",       "lat":  0.6000, "lng": 37.5333 },
+          { "name": "Lamu Island",   "lat": -2.2694, "lng": 40.9020 }
+        ]
+      },
+      "amenities": {
+        "roomTitle": "Tienda de Lujo en Campo Privado",
+        "roomList": [
+          "Tienda glamping con cama King Size",
+          "Terraza privada con vista a la sabana",
+          "Ducha exterior con agua caliente",
+          "Servicio de mayordomo personal",
+          "Mosquitero de lino premium",
+          "Amenities orgánicos locales",
+          "Linterna y kit de explorador",
+          "Caja de seguridad",
+          "Ventilador de techo silencioso",
+          "Bathrobe y pantuflas de algodón"
+        ],
+        "roomImage": "/glamping-tienda-kenia.jpg",
+        "conciergeTitle": "Privilegios Safari — Exclusivos",
+        "conciergeList": [
+          "Guía de safari privado certificado bilingüe",
+          "Salidas al amanecer y atardecer en vehículo exclusivo",
+          "Cena privada bajo las estrellas en la sabana",
+          "Visita cultural a aldea Masái con ceremonia de bienvenida",
+          "Vuelo panorámico en globo aerostático sobre el Masái Mara",
+          "Traslados aéreos entre reservas en avioneta privada",
+          "Fotografía profesional de fauna incluida un día"
+        ],
+        "includesTitle": "¿Qué incluye tu safari?",
+        "includesImage": "/comida-campo-kenia.jpg",
+        "includesList": [
+          "Todas las noches de alojamiento en campos privados 5 estrellas",
+          "Pensión completa: desayuno, almuerzo, cena y snacks de safari",
+          "Bebidas premium: vinos, cervezas, refrescos y aguas",
+          "Todas las actividades de safari en vehículo 4x4",
+          "Traslados aeropuerto — campo en cada destino",
+          "Binoculares de alta gama por persona",
+          "Seguro de viaje y asistencia médica",
+          "Propinas a guías y personal del campo"
+        ],
+        "notIncludedList": [
+          "Tiquetes aéreos internacionales",
+          "Visa de ingreso a Kenia",
+          "Actividades opcionales no mencionadas",
+          "Gastos personales y souvenirs",
+          "Llamadas telefónicas internacionales"
+        ],
+        "requirementsList": [
+          "Pasaporte con vigencia mínima de 6 meses al finalizar el viaje",
+          "Visa requerida para Kenia (tramitable en línea)",
+          "Vacunas recomendadas: fiebre amarilla, hepatitis A y tifoidea",
+          "Ropa en tonos neutros (beige, caqui, verde oliva) para los safaris",
+          "Calzado cerrado y cómodo obligatorio en las reservas"
+        ]
+      }
+    },
+    {
+      "slug": "fiordos-noruega-auroras-2026",
+      "title": "Fiordos Noruegos & Auroras Boreales 2026",
+      "isFeatured": true,
+      "imageUrl": "/noruega-aurora-boreal-hero.jpg",
+      "intro": {
+        "slogan": "Deja que el cielo ártico te pinte una historia que nunca olvidarás",
+        "daysNights": "9 Días / 8 Noches",
+        "description": "Navega entre paredes de roca milenaria que caen directamente al mar, descubre aldeas vikingas y espera con emoción el momento en que el firmamento explota en verdes, violetas y azules. Los fiordos noruegos en invierno son uno de los paisajes más sobrecogedores del planeta, y las auroras boreales su espectáculo más íntimo.",
+        "imageLeft": "/bergen-noruega.jpg",
+        "imageRight": "/aurora-boreal-tromso.jpg"
+      },
+      "itinerary": {
+        "goldMessage": "Entre hielo, silencio y luz — aquí el tiempo se detiene y la naturaleza toma el control",
+        "mainImage": "/crucero-fiordo-noruega.jpg",
+        "departure": "Bergen, Noruega — 10 enero 2026",
+        "arrival": "Tromsø, Noruega — 18 enero 2026",
+        "mapImage": "/mapa-fiordos-noruega.jpg",
+        "stops": [
+          { "name": "Bergen",    "lat": 60.3913, "lng":  5.3221 },
+          { "name": "Flåm",      "lat": 60.8629, "lng":  7.1159 },
+          { "name": "Geiranger", "lat": 62.1000, "lng":  7.2000 },
+          { "name": "Ålesund",   "lat": 62.4722, "lng":  6.1495 },
+          { "name": "Lofoten",   "lat": 68.1533, "lng": 13.9917 },
+          { "name": "Tromsø",    "lat": 69.6496, "lng": 18.9560 }
+        ]
+      },
+      "amenities": {
+        "roomTitle": "Cabaña de Vidrio con Vista al Fiordo",
+        "roomList": [
+          "Cabaña con techo de vidrio para observar auroras desde la cama",
+          "Cama King Size con ropa de cama térmica premium",
+          "Chimenea eléctrica de diseño escandinavo",
+          "Bañera de hidromasaje con vista panorámica al fiordo",
+          "Calefacción radiante en pisos",
+          "Amenities de mantequilla de reno y aceite de ártico",
+          "Bata y pantuflas térmicas de lana merino",
+          "Minibar con licores locales: aquavit y gin ártico",
+          "Telescopio personal para avistamiento de auroras",
+          "TV de pantalla plana y biblioteca de destino"
+        ],
+        "roomImage": "/cabana-vidrio-noruega.jpg",
+        "conciergeTitle": "Privilegios Ártico — Exclusivos",
+        "conciergeList": [
+          "Guía experto en auroras boreales con alerta nocturna en tiempo real",
+          "Excursión en trineo de perros husky por paisaje nevado",
+          "Crucero privado por el Geirangerfjord al amanecer",
+          "Clase de remo en kayak entre icebergs con instructor certificado",
+          "Cena de degustación de cocina nórdica con maridaje de vinos",
+          "Sesión de fotografía nocturna de auroras con fotógrafo profesional",
+          "Traslado en snowmobile desde la cabaña al punto de avistamiento"
+        ],
+        "includesTitle": "¿Qué incluye tu expedición?",
+        "includesImage": "/cena-nordica-noruega.jpg",
+        "includesList": [
+          "Todas las noches de alojamiento en cabañas premium",
+          "Desayuno escandinavo completo cada mañana",
+          "Cenas gourmet de cocina nórdica cuatro noches",
+          "Transporte terrestre y marítimo entre destinos",
+          "Equipo de invierno: traje térmico, botas y guantes",
+          "Pase diario de spa con sauna finlandés y baño de hielo",
+          "Seguro de viaje, cancelación y asistencia médica",
+          "Bebidas calientes ilimitadas: café, té, chocolate y glögg"
+        ],
+        "notIncludedList": [
+          "Tiquetes aéreos internacionales",
+          "Almuerzos libres en los pueblos",
+          "Actividades opcionales no mencionadas",
+          "Gastos personales y souvenirs",
+          "Propinas al personal y guías"
+        ],
+        "requirementsList": [
+          "Pasaporte vigente — ciudadanos colombianos no requieren visa para Noruega (Schengen 90 días)",
+          "Temperatura promedio en enero: -5°C a -15°C — ropa de abrigo extremo obligatoria",
+          "Se recomienda seguro de cancelación por condiciones climáticas",
+          "Condición física básica requerida para actividades en nieve",
+          "Las auroras boreales no están garantizadas — dependen de actividad solar y clima"
+        ]
+      }
+    }
+  ]
+}

@@ -10,23 +10,23 @@ async function getHomeData() {
 
 export default async function AdminPage() {
   const data = await getHomeData()
-  
-  // Datos por defecto
-  const defaultData = {
-    hero: { shipImageUrl: "/cruise.webp", exploreLink: "/exp", infoLink: "/info" },
-    services: { title: "Servicios", description: "Conoce más...", cards: [] },
-    contact: { leftTitle: "Inicia tu viaje", leftDescription: "...", circleTitle: "Estamos aquí", socials: [] }
-  }
-
-  const homeData = data || defaultData
   const brochures = await prisma.brochure.findMany({ select: { id: true, name: true } })
 
+  if (!data) {
+    return (
+      <div className="p-6">
+        <h1 className="title-h3 text-expery-blue">Edición Home</h1>
+        <p className="mt-4 text-expery-iron">No hay configuración para Home.</p>
+      </div>
+    )
+  }
+
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-100">
+    <div className="flex h-full w-full overflow-hidden bg-slate-100">
       {/* PREVISUALIZACIÓN EN VIVO */}
-      <main className="flex-1 h-full overflow-y-auto bg-slate-200 p-8 flex justify-center">
+      <main className="flex-1 overflow-y-auto bg-slate-200 flex justify-center">
         <div className="w-full max-w-360 h-fit bg-white shadow-2xl origin-top transition-transform duration-500">
-          <HomePreview />
+          <HomePreview data={data} brochures={brochures} />
         </div>
       </main>
     </div>
