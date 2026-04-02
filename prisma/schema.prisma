@@ -31,7 +31,6 @@ model Cruise {
   description String
   imageUrl    String
   ctaText     String
-  externalLink String
   order       Int      @default(0)
 }
 
@@ -61,4 +60,16 @@ model Brochure {
   fileUrl     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime? @updatedAt
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name    String
+  last_name  String
+  email     String   @unique
+  password  String   // Hash de la contraseña
+  rol       String   @default("admin") // admin, editor, etc.
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
 }

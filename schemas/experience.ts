@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const IntroSchema = z.object({
+export const IntroSchema = z.object({
   slogan: z.string(),
   daysNights: z.string(),
   description: z.string(),
@@ -8,28 +8,35 @@ const IntroSchema = z.object({
   imageRight: z.string(),
 });
 
-const ItinerarySchema = z.object({
+export const StopSchema = z.object({
+  name: z.string(),
+  lat: z.number(),
+  lng: z.number(),
+});
+
+export const ItinerarySchema = z.object({
   goldMessage: z.string(),
   mainImage: z.string(),
   departure: z.string(),
   arrival: z.string(),
   mapImage: z.string(),
+  stops: z.array(StopSchema),
 });
 
-const AmenitiesSchema = z.object({
+export const AmenitiesSchema = z.object({
   roomTitle: z.string(),
   roomList: z.array(z.string()),
   roomImage: z.string(),
+  conciergeTitle: z.string(),
+  conciergeList: z.array(z.string()),
   includesTitle: z.string(),
   includesImage: z.string(),
   includesList: z.array(z.string()),
-  optionalGrid: z.array(z.string()).optional(),
   notIncludedList: z.array(z.string()),
   requirementsList: z.array(z.string()),
 });
 
 export const ExperienceSchema = z.object({
-  id: z.string(),
   slug: z.string(),
   title: z.string(),
   isFeatured: z.boolean(),
@@ -37,8 +44,9 @@ export const ExperienceSchema = z.object({
   intro: IntroSchema,
   itinerary: ItinerarySchema,
   amenities: AmenitiesSchema,
-  createdAt: z.date(),
-  updatedAt: z.date().nullable(),
 });
 
-export type ParsedExperience = z.infer<typeof ExperienceSchema>;
+export type IntroData = z.infer<typeof IntroSchema>;
+export type ItineraryData = z.infer<typeof ItinerarySchema>;
+export type AmenitiesData = z.infer<typeof AmenitiesSchema>;
+export type ExperienceData = z.infer<typeof ExperienceSchema>;

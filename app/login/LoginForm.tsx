@@ -8,27 +8,29 @@ import { useState } from "react"
 
 export function LoginForm() {
   const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (formData: FormData) => {
     setPending(true)
+    setError(null)
     try {
       await loginAdmin(formData)
     } catch (error) {
+      setError(error instanceof Error ? error.message : 'Credenciales inválidas')
       setPending(false)
-      alert('Credenciales inválidas')
     }
   }
 
   return (
     <form action={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="username">Usuario</Label>
+        <Label htmlFor="email">Correo electrónico</Label>
         <Input 
-          id="username" 
-          name="username" 
-          type="text" 
+          id="email" 
+          name="email" 
+          type="email" 
           required 
-          placeholder="admin"
+          placeholder="admin@ejemplo.com"
           className="w-full"
         />
       </div>
@@ -45,7 +47,11 @@ export function LoginForm() {
         />
       </div>
 
-      <Button type="submit" className="w-full bg-classic-gold hover:bg-classic-gold/90" disabled={pending}>
+      {error && (
+        <p className="text-sm text-red-600 text-center">{error}</p>
+      )}
+
+      <Button type="submit" className="w-full bg-expery-blue hover:bg-expery-blue/90" disabled={pending}>
         {pending ? "Verificando..." : "Iniciar Sesión"}
       </Button>
     </form>

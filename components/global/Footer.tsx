@@ -7,19 +7,25 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-expery-blue text-white border-t border-white/10 py-12 px-6 md:px-12">
+    <footer className="bg-expery-blue text-white border-t border-white/10 py-10 px-6 md:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 items-start">
         
         {/* COLUMNA IZQUIERDA: Logo Símbolo */}
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="flex justify-center md:justify-start"
+          className="flex flex-col items-center md:items-start"
         >
           {/* Placeholder del Logo Símbolo */}
-          <div className="group cursor-pointer">
+          <div className="group cursor-pointer mb-4">
             <Image src="/logos/original_white.png" alt="Logo" width={180} height={90} />
           </div>
+          <Link 
+            href="/admin" 
+            className="text-[10px] ml-4 text-white/30 uppercase tracking-widest hover:text-white/60 transition-colors"
+          >
+            Acceso administrativo
+          </Link>
         </motion.div>
 
         {/* COLUMNA MEDIO: Impacto y Privacidad */}
@@ -51,13 +57,6 @@ export function Footer() {
         </div>
 
       </div>
-
-      {/* Línea decorativa final */}
-      {/* <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex justify-center">
-        <p className="text-[10px] text-slate-600 uppercase tracking-widest">
-          Expery Travel — Elevando tu experiencia al infinito
-        </p>
-      </div> */}
     </footer>
   );
 }

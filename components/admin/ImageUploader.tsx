@@ -74,15 +74,15 @@ export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
 
   return (
     <div className="space-y-3">
-      <label htmlFor={inputId} className="text-sm font-medium text-slate-700">
+      <label htmlFor={inputId} className="text-sm font-medium text-expery-blue">
         {label}
       </label>
 
       <div
         className={`rounded-xl p-4 ${
           value
-            ? "border border-slate-200 bg-slate-50"
-            : "border-2 border-dashed border-slate-300 bg-white"
+            ? "border border-classic-gold/30 bg-elegant-beige/30"
+            : "border-2 border-dashed border-expery-iron/30 bg-white"
         }`}
       >
         {value ? (
@@ -92,7 +92,7 @@ export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
               <button
                 type="button"
                 onClick={() => onChange("")}
-                className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white transition hover:bg-black/75"
+                className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-expery-blue/80 text-white transition hover:bg-expery-blue"
                 aria-label="Eliminar imagen"
               >
                 <X className="h-4 w-4" />
@@ -100,7 +100,7 @@ export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
             </div>
 
             <label htmlFor={inputId}>
-              <Button type="button" variant="outline" className="w-full cursor-pointer" asChild>
+              <Button type="button" variant="outline" className="w-full cursor-pointer border-classic-gold/30 text-expery-blue hover:bg-classic-gold/10" asChild>
                 <span>
                   <UploadCloud className="mr-2 h-4 w-4" />
                   Cambiar imagen
@@ -111,11 +111,11 @@ export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
         ) : (
           <label
             htmlFor={inputId}
-            className="flex min-h-40 cursor-pointer flex-col items-center justify-center gap-2 text-slate-500"
+            className="flex min-h-40 cursor-pointer flex-col items-center justify-center gap-2 text-expery-iron"
           >
-            <UploadCloud className="h-9 w-9 text-slate-400" />
+            <UploadCloud className="h-9 w-9 text-classic-gold" />
             <span className="text-sm font-medium">Subir imagen</span>
-            <span className="text-xs text-slate-400">Se comprimirá automáticamente (máx. 1200px)</span>
+            <span className="text-xs text-expery-iron/70">Se comprimirá automáticamente (máx. 1200px)</span>
           </label>
         )}
 
@@ -130,7 +130,7 @@ export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
       </div>
 
       {isProcessing && (
-        <div className="flex items-center gap-2 text-sm text-indigo-600">
+        <div className="flex items-center gap-2 text-sm text-classic-gold">
           <Loader2 className="h-4 w-4 animate-spin" />
           <span>Procesando imagen...</span>
         </div>

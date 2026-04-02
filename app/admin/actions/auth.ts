@@ -2,34 +2,50 @@
 
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-
-const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'password';
+import { authenticateUser, getUser } from '@/lib/actions/users';
 
 export async function loginAdmin(formData: FormData): Promise<void> {
-  const user = formData.get('username') as string;
+  const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  if (user === ADMIN_USER && password === ADMIN_PASSWORD) {
-    // Configurar cookie de sesión
-    const cookieStore = await cookies();
-    cookieStore.set('admin_session', 'authenticated', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24, // 24 horas
-      path: '/',
-    });
-    redirect('/admin');
+  const result = await authenticateUser(email, password);
+
+  if (!result.success || !result.user) {
+    throw new Error(result.message || 'Credenciales inválidas');
   }
 
-  // Para errores, usamos redirect a una página de error o lanzamos error
-  // Por ahora, simplemente no hacemos nada y el formulario mostrará error
-  throw new Error('Credenciales inválidas');
+  // Configurar cookie de sesión con el ID del usuario
+  const cookieStore = await cookies();
+  cookieStore.set('admin_session', result.user.id, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24, // 24 horas
+    path: '/',
+  });
+  redirect('/admin');
+}
+
+export async function getCurrentUser() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('admin_session');
+
+  if (!sessionCookie?.value) {
+    return null;
+  }
+
+  const userId = sessionCookie.value;
+  const result = await getUser(userId);
+
+  if (!result.success || !result.user) {
+    return null;
+  }
+
+  return result.user;
 }
 
 export async function logoutAdmin() {
   const cookieStore = await cookies();
   cookieStore.delete('admin_session');
-  redirect('/admin/login');
+  redirect('/');
 }

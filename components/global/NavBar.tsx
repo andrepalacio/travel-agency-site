@@ -1,5 +1,5 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useRef } from "react";
 import { Menu, Phone } from "lucide-react";
 import {
   Sheet,
@@ -12,44 +12,89 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 
-export function NavBar() {
+interface NavBarProps {
+  scrollContainer?: HTMLElement | Window | null;
+  isHomePage?: boolean;
+  absolute?: boolean;
+  scrollOffset?: number;
+  scrollY?: number;
+}
+
+export function NavBar({ scrollContainer, isHomePage, absolute = false, scrollOffset, scrollY }: NavBarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
+  const scrolledRef = useRef(false);
+  const lastScrollYFromPropRef = useRef(0);
   const pathName = usePathname();
 
+  // Determine if we should treat as home page
+  const treatAsHomePage = isHomePage ?? pathName === "/";
+
+  // Determine the scroll container: if prop provided, use it; else window
+  const container = scrollContainer ?? (typeof window !== "undefined" ? window : null);
+
+  // Effect for when scrollY is provided as prop (controlled scroll)
   useEffect(() => {
+    if (scrollY === undefined) return;
+
+    // Update background on home page
+    if (treatAsHomePage) {
+      const threshold = scrollOffset !== undefined ? scrollOffset : (container === window ? window.innerHeight : (container as HTMLElement)?.clientHeight ?? 0);
+      const isScrolled = scrollY > threshold;
+      scrolledRef.current = isScrolled;
+      setScrolled(isScrolled);
+    }
+
+    // Show/hide navbar based on scroll direction
+    if (scrollY > lastScrollYFromPropRef.current && scrollY > 10) {
+      setVisible(false);
+    } else {
+      setVisible(true);
+    }
+
+    lastScrollYFromPropRef.current = scrollY;
+  }, [scrollY, treatAsHomePage, scrollOffset, container]);
+
+  // Effect for when scrollY is not provided (uncontrolled scroll)
+  useEffect(() => {
+    if (scrollY !== undefined || !container) return;
+
     const handleScroll = () => {
-      const heroHeight = window.innerHeight;
-      const currentScrollY = window.scrollY;
+      const heroHeight = container === window ? window.innerHeight : (container as HTMLElement).clientHeight;
+      const currentScrollY = container === window ? window.scrollY : (container as HTMLElement).scrollTop;
 
       // Update background on home page
-      if (pathName === "/") {
-        setScrolled(currentScrollY > heroHeight);
+      if (treatAsHomePage) {
+        const threshold = scrollOffset !== undefined ? scrollOffset : heroHeight;
+        const isScrolled = currentScrollY > threshold;
+        scrolledRef.current = isScrolled;
+        setScrolled(isScrolled);
       }
 
       // Show/hide navbar based on scroll direction
-      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+      if (currentScrollY > lastScrollYRef.current && currentScrollY > 10) {
         setVisible(false);
       } else {
         setVisible(true);
       }
 
-      setLastScrollY(currentScrollY);
+      lastScrollYRef.current = currentScrollY;
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathName, lastScrollY]);
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [scrollY, container, treatAsHomePage, scrollOffset]);
 
   let bgClass = "bg-expery-blue";
-  if (pathName === "/" && !scrolled) {
+  if (treatAsHomePage && !scrolled) {
     bgClass = "bg-transparent";
   }
+  const positionClass = absolute ? "absolute" : "fixed";
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 flex justify-between items-center px-4 py-6 text-white transition-transform duration-300 ${bgClass} ${
+      className={`${positionClass} top-0 w-full z-50 flex justify-between items-center px-4 py-6 text-white transition-transform duration-300 ${bgClass} ${
         visible ? "translate-y-0" : "-translate-y-full"
       }`}
     >

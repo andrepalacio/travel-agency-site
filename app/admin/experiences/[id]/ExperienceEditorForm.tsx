@@ -1,449 +1,443 @@
 "use client";
 
-import Link from "next/link";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { type ComponentProps, type ReactNode, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Tabs as TabsPrimitive } from "radix-ui";
 
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { DetailedExperience } from "@/types/experience";
-import { updateExperience } from "./actions";
-
-const ExperienceEditorSchema = z.object({
-  id: z.string(),
-  title: z.string().min(1, "El título es obligatorio"),
-  slug: z.string().min(1, "El slug es obligatorio"),
-  isFeatured: z.boolean(),
-  imageUrl: z.string(),
-  intro: z.object({
-    daysNights: z.string(),
-    slogan: z.string(),
-    description: z.string(),
-    imageLeft: z.string(),
-    imageRight: z.string(),
-  }),
-  itinerary: z.object({
-    goldMessage: z.string(),
-    mainImage: z.string(),
-    departure: z.string(),
-    arrival: z.string(),
-    mapImage: z.string(),
-  }),
-  amenities: z.object({
-    roomTitle: z.string(),
-    roomList: z.array(z.string()),
-    roomImage: z.string(),
-    includesTitle: z.string(),
-    includesList: z.array(z.string()),
-    includesImage: z.string(),
-    optionalGrid: z.array(z.string()).max(6, "Máximo 6 imágenes"),
-    notIncludedList: z.array(z.string()),
-    requirementsList: z.array(z.string()),
-  }),
-});
-
-type ExperienceEditorFormValues = z.infer<typeof ExperienceEditorSchema>;
+import { ExperienceSchema, type ExperienceData } from "@/schemas/experience";
 
 type ExperienceEditorFormProps = {
-  id: string;
-  initialData: {
-    title: string;
-    slug: string;
-    isFeatured: boolean;
-    imageUrl: string;
-    details: DetailedExperience;
-  };
-  isEditing?: boolean;
+  defaultValues: ExperienceData;
+  onSave: (values: ExperienceData) => Promise<void> | void;
+  isEditing: boolean;
 };
 
-function StringListField({
-  label,
-  values,
+function Textarea({ className = "", ...props }: ComponentProps<"textarea">) {
+  return (
+    <textarea
+      className={`w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30 ${className}`}
+      {...props}
+    />
+  );
+}
+
+function Tabs({ className, ...props }: ComponentProps<typeof TabsPrimitive.Root>) {
+  return <TabsPrimitive.Root className={className} {...props} />;
+}
+
+function TabsList({ className = "", ...props }: ComponentProps<typeof TabsPrimitive.List>) {
+  return (
+    <TabsPrimitive.List
+      className={`inline-flex w-full flex-wrap gap-2 rounded-lg border border-classic-gold/30 bg-elegant-beige/20 p-2 ${className}`}
+      {...props}
+    />
+  );
+}
+
+function TabsTrigger({ className = "", ...props }: ComponentProps<typeof TabsPrimitive.Trigger>) {
+  return (
+    <TabsPrimitive.Trigger
+      className={`rounded-md px-3 py-2 text-sm font-medium text-expery-blue transition data-[state=active]:bg-classic-gold data-[state=active]:text-white ${className}`}
+      {...props}
+    />
+  );
+}
+
+function TabsContent({ className = "", ...props }: ComponentProps<typeof TabsPrimitive.Content>) {
+  return <TabsPrimitive.Content className={`mt-4 ${className}`} {...props} />;
+}
+
+function ListSection({
+  title,
   onAdd,
-  onRemove,
-  onChange,
+  children,
 }: {
-  label: string;
-  values: string[];
+  title: string;
   onAdd: () => void;
-  onRemove: (index: number) => void;
-  onChange: (index: number, value: string) => void;
+  children: ReactNode;
 }) {
   return (
-    <div className="space-y-3 rounded-lg border border-slate-200 p-4">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold text-slate-800">{label}</h3>
-        <Button type="button" variant="outline" size="sm" onClick={onAdd}>
-          Agregar
+    <div className="space-y-3 rounded-lg border border-classic-gold/20 p-4">
+      <div className="flex items-center justify-between gap-2">
+        <h4 className="text-sm font-semibold text-expery-blue">{title}</h4>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onAdd}
+          className="text-classic-gold hover:bg-classic-gold/10 hover:text-classic-gold"
+        >
+          + Agregar
         </Button>
       </div>
-
-      <div className="space-y-2">
-        {values.length === 0 ? (
-          <p className="text-sm text-slate-500">Sin elementos todavía.</p>
-        ) : (
-          values.map((value, index) => (
-            <div key={`${label}-${index}`} className="flex items-center gap-2">
-              <Input
-                value={value}
-                onChange={(e) => onChange(index, e.target.value)}
-                placeholder={`Elemento ${index + 1}`}
-              />
-              <Button type="button" variant="outline" size="sm" onClick={() => onRemove(index)}>
-                Quitar
-              </Button>
-            </div>
-          ))
-        )}
-      </div>
+      <div className="space-y-2">{children}</div>
     </div>
   );
 }
 
 export default function ExperienceEditorForm({
-  id,
-  initialData,
-  isEditing = true,
+  defaultValues,
+  onSave,
+  isEditing,
 }: ExperienceEditorFormProps) {
-  const [isPending, startTransition] = useTransition();
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"general" | "intro" | "itinerary" | "amenities">(
-    "general",
-  );
+  const [isSaving, setIsSaving] = useState(false);
 
-  const form = useForm<ExperienceEditorFormValues>({
-    resolver: zodResolver(ExperienceEditorSchema),
-    defaultValues: {
-      id,
-      title: initialData.title,
-      slug: initialData.slug,
-      isFeatured: initialData.isFeatured,
-      imageUrl: initialData.imageUrl,
-      intro: {
-        daysNights: initialData.details.intro.daysNights ?? "",
-        slogan: initialData.details.intro.slogan ?? "",
-        description: initialData.details.intro.description ?? "",
-        imageLeft: initialData.details.intro.imageLeft ?? "",
-        imageRight: initialData.details.intro.imageRight ?? "",
-      },
-      itinerary: {
-        goldMessage: initialData.details.itinerary.goldMessage ?? "",
-        mainImage: initialData.details.itinerary.mainImage ?? "",
-        departure: initialData.details.itinerary.departure ?? "",
-        arrival: initialData.details.itinerary.arrival ?? "",
-        mapImage: initialData.details.itinerary.mapImage ?? "",
-      },
-      amenities: {
-        roomTitle: initialData.details.amenities.roomTitle ?? "",
-        roomList: initialData.details.amenities.roomList ?? [],
-        roomImage: initialData.details.amenities.roomImage ?? "",
-        includesTitle: initialData.details.amenities.includesTitle ?? "",
-        includesList: initialData.details.amenities.includesList ?? [],
-        includesImage: initialData.details.amenities.includesImage ?? "",
-        optionalGrid: initialData.details.amenities.optionalGrid ?? [],
-        notIncludedList: initialData.details.amenities.notIncludedList ?? [],
-        requirementsList: initialData.details.amenities.requirementsList ?? [],
-      },
-    },
+  const form = useForm<ExperienceData>({
+    resolver: zodResolver(ExperienceSchema),
+    defaultValues,
   });
 
-  const updateList = (
-    key:
-      | "roomList"
-      | "includesList"
-      | "optionalGrid"
-      | "notIncludedList"
-      | "requirementsList",
-    updater: (current: string[]) => string[],
-  ) => {
-    const current = form.getValues(`amenities.${key}`) ?? [];
-    form.setValue(`amenities.${key}`, updater(current), { shouldDirty: true });
-  };
+  const stopsArray = useFieldArray({ control: form.control, name: "itinerary.stops" });
+  const roomListArray = useFieldArray({ control: form.control as never, name: "amenities.roomList" as never });
+  const conciergeListArray = useFieldArray({
+    control: form.control as never,
+    name: "amenities.conciergeList" as never,
+  });
+  const includesListArray = useFieldArray({
+    control: form.control as never,
+    name: "amenities.includesList" as never,
+  });
+  const notIncludedListArray = useFieldArray({
+    control: form.control as never,
+    name: "amenities.notIncludedList" as never,
+  });
+  const requirementsListArray = useFieldArray({
+    control: form.control as never,
+    name: "amenities.requirementsList" as never,
+  });
 
-  const onSubmit = (values: ExperienceEditorFormValues) => {
-    setStatusMessage(null);
-    startTransition(async () => {
-      const result = await updateExperience(values.id, {
-        title: values.title,
-        isFeatured: values.isFeatured,
-        imageUrl: values.imageUrl,
-        intro: values.intro,
-        itinerary: values.itinerary,
-        amenities: values.amenities,
-      });
-
-      setStatusMessage(result.message);
-    });
-  };
+  const handleSubmit = form.handleSubmit(async (values) => {
+    setIsSaving(true);
+    try {
+      await onSave(values);
+    } finally {
+      setIsSaving(false);
+    }
+  });
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
-        <div className="flex flex-wrap gap-2">
-          {[
-            { key: "general", label: "General" },
-            { key: "intro", label: "Intro" },
-            { key: "itinerary", label: "Itinerary" },
-            { key: "amenities", label: "Amenities" },
-          ].map((tab) => (
-            <Button
-              key={tab.key}
-              type="button"
-              variant={activeTab === tab.key ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveTab(tab.key as typeof activeTab)}
-            >
-              {tab.label}
-            </Button>
-          ))}
-        </div>
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <Tabs defaultValue="general" className="w-full">
+        <TabsList>
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="intro">Intro</TabsTrigger>
+          <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
+          <TabsTrigger value="amenities">Amenities</TabsTrigger>
+        </TabsList>
 
-      {activeTab === "general" && (
-        <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold">General</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              Título
-              <Input type="text" {...form.register("title")} />
-            </label>
+        <TabsContent value="general" className="space-y-4 rounded-lg border border-classic-gold/20 p-5">
+          <h3 className="title-h3 text-expery-blue">General</h3>
 
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              Slug
-              <Input type="text" {...form.register("slug")} readOnly={isEditing} />
-            </label>
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Título</span>
+            <Input {...form.register("title")} className="focus-visible:ring-classic-gold/40" />
+          </label>
 
-            <label className="flex items-center gap-2 text-sm font-medium md:col-span-2">
-              <input type="checkbox" {...form.register("isFeatured")} />
-              Destacada (isFeatured)
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium md:col-span-2">
-              URL imagen principal
-              <Input type="text" {...form.register("imageUrl")} />
-            </label>
-
-            <div className="md:col-span-2">
-              <ImageUploader
-                label="Imagen principal"
-                value={form.watch("imageUrl")}
-                onChange={(url) => form.setValue("imageUrl", url)}
-              />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {activeTab === "intro" && (
-        <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold">Intro</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              daysNights
-              <Input type="text" {...form.register("intro.daysNights")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium md:col-span-2">
-              slogan
-              <textarea
-                {...form.register("intro.slogan")}
-                className="min-h-24 rounded-md border border-slate-300 px-3 py-2 text-sm"
-              />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium md:col-span-2">
-              description
-              <textarea
-                {...form.register("intro.description")}
-                className="min-h-32 rounded-md border border-slate-300 px-3 py-2 text-sm"
-              />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              imageLeft (URL)
-              <Input type="text" {...form.register("intro.imageLeft")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              imageRight (URL)
-              <Input type="text" {...form.register("intro.imageRight")} />
-            </label>
-
-            <ImageUploader
-              label="Imagen izquierda"
-              value={form.watch("intro.imageLeft")}
-              onChange={(url) => form.setValue("intro.imageLeft", url)}
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Slug</span>
+            <Input
+              {...form.register("slug")}
+              readOnly={isEditing}
+              className="focus-visible:ring-classic-gold/40"
             />
+          </label>
 
-            <ImageUploader
-              label="Imagen derecha"
-              value={form.watch("intro.imageRight")}
-              onChange={(url) => form.setValue("intro.imageRight", url)}
+          <label className="flex items-center gap-2 text-sm text-expery-blue">
+            <input type="checkbox" {...form.register("isFeatured")} className="accent-classic-gold" />
+            Destacada
+          </label>
+
+          <Controller
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <ImageUploader label="Imagen principal" value={field.value || ""} onChange={field.onChange} />
+            )}
+          />
+        </TabsContent>
+
+        <TabsContent value="intro" className="space-y-4 rounded-lg border border-classic-gold/20 p-5">
+          <h3 className="title-h3 text-expery-blue">Intro</h3>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Días / Noches</span>
+            <Input {...form.register("intro.daysNights")} className="focus-visible:ring-classic-gold/40" />
+          </label>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Slogan</span>
+            <Textarea {...form.register("intro.slogan")} rows={3} />
+          </label>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Descripción</span>
+            <Textarea {...form.register("intro.description")} rows={5} />
+          </label>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Controller
+              control={form.control}
+              name="intro.imageLeft"
+              render={({ field }) => (
+                <ImageUploader label="Imagen izquierda" value={field.value || ""} onChange={field.onChange} />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="intro.imageRight"
+              render={({ field }) => (
+                <ImageUploader label="Imagen derecha" value={field.value || ""} onChange={field.onChange} />
+              )}
             />
           </div>
-        </section>
-      )}
+        </TabsContent>
 
-      {activeTab === "itinerary" && (
-        <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold">Itinerary</h2>
+        <TabsContent value="itinerary" className="space-y-4 rounded-lg border border-classic-gold/20 p-5">
+          <h3 className="title-h3 text-expery-blue">Itinerary</h3>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Gold message</span>
+            <Input
+              {...form.register("itinerary.goldMessage")}
+              className="focus-visible:ring-classic-gold/40"
+            />
+          </label>
+
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm font-medium md:col-span-2">
-              goldMessage
-              <Input type="text" {...form.register("itinerary.goldMessage")} />
+            <label className="block space-y-2">
+              <span className="text-sm text-expery-blue">Salida</span>
+              <Input
+                {...form.register("itinerary.departure")}
+                className="focus-visible:ring-classic-gold/40"
+              />
             </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              departure
-              <Input type="text" {...form.register("itinerary.departure")} />
+            <label className="block space-y-2">
+              <span className="text-sm text-expery-blue">Llegada</span>
+              <Input
+                {...form.register("itinerary.arrival")}
+                className="focus-visible:ring-classic-gold/40"
+              />
             </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              arrival
-              <Input type="text" {...form.register("itinerary.arrival")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              mainImage (URL)
-              <Input type="text" {...form.register("itinerary.mainImage")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              mapImage (URL)
-              <Input type="text" {...form.register("itinerary.mapImage")} />
-            </label>
-
-            <ImageUploader
-              label="Imagen principal del itinerario"
-              value={form.watch("itinerary.mainImage")}
-              onChange={(url) => form.setValue("itinerary.mainImage", url)}
-            />
-
-            <ImageUploader
-              label="Mapa del itinerario"
-              value={form.watch("itinerary.mapImage")}
-              onChange={(url) => form.setValue("itinerary.mapImage", url)}
-            />
-          </div>
-        </section>
-      )}
-
-      {activeTab === "amenities" && (
-        <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-xl font-semibold">Amenities</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              roomTitle
-              <Input type="text" {...form.register("amenities.roomTitle")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              includesTitle
-              <Input type="text" {...form.register("amenities.includesTitle")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              roomImage (URL)
-              <Input type="text" {...form.register("amenities.roomImage")} />
-            </label>
-
-            <label className="flex flex-col gap-2 text-sm font-medium">
-              includesImage (URL)
-              <Input type="text" {...form.register("amenities.includesImage")} />
-            </label>
-
-            <ImageUploader
-              label="Imagen de habitaciones"
-              value={form.watch("amenities.roomImage")}
-              onChange={(url) => form.setValue("amenities.roomImage", url)}
-            />
-
-            <ImageUploader
-              label="Imagen de incluidos"
-              value={form.watch("amenities.includesImage")}
-              onChange={(url) => form.setValue("amenities.includesImage", url)}
-            />
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-              <StringListField
-                label="roomList"
-                values={form.watch("amenities.roomList")}
-                onAdd={() => updateList("roomList", (list) => [...list, ""])}
-                onRemove={(index) => updateList("roomList", (list) => list.filter((_, i) => i !== index))}
-                onChange={(index, value) =>
-                  updateList("roomList", (list) => list.map((item, i) => (i === index ? value : item)))
-                }
-              />
-
-              <StringListField
-                label="includesList"
-                values={form.watch("amenities.includesList")}
-                onAdd={() => updateList("includesList", (list) => [...list, ""])}
-                onRemove={(index) =>
-                  updateList("includesList", (list) => list.filter((_, i) => i !== index))
-                }
-                onChange={(index, value) =>
-                  updateList("includesList", (list) => list.map((item, i) => (i === index ? value : item)))
-                }
-              />
-
-              <StringListField
-                label="optionalGrid (máx. 6 URLs)"
-                values={form.watch("amenities.optionalGrid")}
-                onAdd={() =>
-                  updateList("optionalGrid", (list) => (list.length < 6 ? [...list, ""] : list))
-                }
-                onRemove={(index) =>
-                  updateList("optionalGrid", (list) => list.filter((_, i) => i !== index))
-                }
-                onChange={(index, value) =>
-                  updateList("optionalGrid", (list) => list.map((item, i) => (i === index ? value : item)))
-                }
-              />
-
-              <StringListField
-                label="notIncludedList"
-                values={form.watch("amenities.notIncludedList")}
-                onAdd={() => updateList("notIncludedList", (list) => [...list, ""])}
-                onRemove={(index) =>
-                  updateList("notIncludedList", (list) => list.filter((_, i) => i !== index))
-                }
-                onChange={(index, value) =>
-                  updateList("notIncludedList", (list) => list.map((item, i) => (i === index ? value : item)))
-                }
-              />
-
-            <div className="md:col-span-2">
-              <StringListField
-                label="requirementsList"
-                values={form.watch("amenities.requirementsList")}
-                onAdd={() => updateList("requirementsList", (list) => [...list, ""])}
-                onRemove={(index) =>
-                  updateList("requirementsList", (list) => list.filter((_, i) => i !== index))
-                }
-                onChange={(index, value) =>
-                  updateList("requirementsList", (list) => list.map((item, i) => (i === index ? value : item)))
-                }
-              />
-            </div>
+            <Controller
+              control={form.control}
+              name="itinerary.mainImage"
+              render={({ field }) => (
+                <ImageUploader
+                  label="Imagen principal del itinerario"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="itinerary.mapImage"
+              render={({ field }) => (
+                <ImageUploader label="Imagen de mapa" value={field.value || ""} onChange={field.onChange} />
+              )}
+            />
           </div>
-        </section>
-      )}
 
-      <div className="flex flex-wrap items-center justify-end gap-3">
-        <Button type="button" variant="outline" asChild>
-          <Link href="/admin/experiences">Cancelar / Volver</Link>
+          <ListSection
+            title="Paradas"
+            onAdd={() => stopsArray.append({ name: "", lat: 0, lng: 0 })}
+          >
+            {stopsArray.fields.length === 0 ? (
+              <p className="text-sm text-expery-blue/70">Sin paradas cargadas.</p>
+            ) : (
+              stopsArray.fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="grid gap-2 rounded-md border border-expery-blue/15 p-3 md:grid-cols-[1fr_140px_140px_auto]"
+                >
+                  <Input
+                    placeholder="Nombre"
+                    {...form.register(`itinerary.stops.${index}.name`)}
+                    className="focus-visible:ring-classic-gold/40"
+                  />
+                  <Input
+                    type="number"
+                    step="any"
+                    placeholder="Lat"
+                    {...form.register(`itinerary.stops.${index}.lat`, { valueAsNumber: true })}
+                    className="focus-visible:ring-classic-gold/40"
+                  />
+                  <Input
+                    type="number"
+                    step="any"
+                    placeholder="Lng"
+                    {...form.register(`itinerary.stops.${index}.lng`, { valueAsNumber: true })}
+                    className="focus-visible:ring-classic-gold/40"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => stopsArray.remove(index)}
+                    className="text-expery-blue hover:bg-expery-blue/10"
+                  >
+                    Quitar
+                  </Button>
+                </div>
+              ))
+            )}
+          </ListSection>
+        </TabsContent>
+
+        <TabsContent value="amenities" className="space-y-4 rounded-lg border border-classic-gold/20 p-5">
+          <h3 className="title-h3 text-expery-blue">Amenities</h3>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Título de habitaciones</span>
+            <Input {...form.register("amenities.roomTitle")} className="focus-visible:ring-classic-gold/40" />
+          </label>
+
+          <Controller
+            control={form.control}
+            name="amenities.roomImage"
+            render={({ field }) => (
+              <ImageUploader label="Imagen de habitaciones" value={field.value || ""} onChange={field.onChange} />
+            )}
+          />
+
+          <ListSection title="Lista de habitaciones" onAdd={() => roomListArray.append("")}>
+            {roomListArray.fields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-2">
+                <Input
+                  {...form.register(`amenities.roomList.${index}`)}
+                  className="focus-visible:ring-classic-gold/40"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => roomListArray.remove(index)}
+                  className="text-expery-blue hover:bg-expery-blue/10"
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+          </ListSection>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Título de concierge</span>
+            <Input
+              {...form.register("amenities.conciergeTitle")}
+              className="focus-visible:ring-classic-gold/40"
+            />
+          </label>
+
+          <ListSection title="Lista concierge" onAdd={() => conciergeListArray.append("")}>
+            {conciergeListArray.fields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-2">
+                <Input
+                  {...form.register(`amenities.conciergeList.${index}`)}
+                  className="focus-visible:ring-classic-gold/40"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => conciergeListArray.remove(index)}
+                  className="text-expery-blue hover:bg-expery-blue/10"
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+          </ListSection>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-expery-blue">Título de incluidos</span>
+            <Input
+              {...form.register("amenities.includesTitle")}
+              className="focus-visible:ring-classic-gold/40"
+            />
+          </label>
+
+          <Controller
+            control={form.control}
+            name="amenities.includesImage"
+            render={({ field }) => (
+              <ImageUploader label="Imagen de incluidos" value={field.value || ""} onChange={field.onChange} />
+            )}
+          />
+
+          <ListSection title="Lista de incluidos" onAdd={() => includesListArray.append("")}>
+            {includesListArray.fields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-2">
+                <Input
+                  {...form.register(`amenities.includesList.${index}`)}
+                  className="focus-visible:ring-classic-gold/40"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => includesListArray.remove(index)}
+                  className="text-expery-blue hover:bg-expery-blue/10"
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+          </ListSection>
+
+          <ListSection title="No incluido" onAdd={() => notIncludedListArray.append("")}>
+            {notIncludedListArray.fields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-2">
+                <Input
+                  {...form.register(`amenities.notIncludedList.${index}`)}
+                  className="focus-visible:ring-classic-gold/40"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => notIncludedListArray.remove(index)}
+                  className="text-expery-blue hover:bg-expery-blue/10"
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+          </ListSection>
+
+          <ListSection title="Requisitos" onAdd={() => requirementsListArray.append("")}>
+            {requirementsListArray.fields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-2">
+                <Input
+                  {...form.register(`amenities.requirementsList.${index}`)}
+                  className="focus-visible:ring-classic-gold/40"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => requirementsListArray.remove(index)}
+                  className="text-expery-blue hover:bg-expery-blue/10"
+                >
+                  Quitar
+                </Button>
+              </div>
+            ))}
+          </ListSection>
+        </TabsContent>
+      </Tabs>
+
+      <div className="flex justify-end">
+        <Button type="submit" disabled={isSaving} className="btn-primary">
+          {isSaving ? "Guardando..." : "Guardar experiencia"}
         </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Guardando..." : "Guardar"}
-        </Button>
       </div>
-
-      {statusMessage ? <p className="text-sm text-slate-700">{statusMessage}</p> : null}
     </form>
   );
 }
