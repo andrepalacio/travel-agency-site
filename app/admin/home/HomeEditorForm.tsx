@@ -31,7 +31,7 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <section className="rounded-lg border bg-white p-5 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Hero</h2>
+        <h2 className="mb-4 text-xl font-semibold text-expery-blue">Principal</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2">
@@ -49,27 +49,20 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
           </div>
 
           <label className="block space-y-2">
-            <span className="text-sm text-expery-blue">Enlace &quot;Explorar&quot;</span>
-            <input
-              type="text"
+            <span className="text-sm text-expery-blue">Acción &quot;Explorar&quot;</span>
+            <select
               {...register("hero.exploreLink")}
-              className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30"
-            />
-          </label>
-
-          <label className="block space-y-2">
-            <span className="text-sm text-expery-blue">Enlace &quot;Más info&quot;</span>
-            <input
-              type="text"
-              {...register("hero.infoLink")}
-              className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30"
-            />
+              className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30 bg-white"
+            >
+              <option value="/cruises">Cruceros</option>
+              <option value="/experiences">Experiencias</option>
+            </select>
           </label>
         </div>
       </section>
 
       <section className="rounded-lg border bg-white p-5 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Servicios</h2>
+        <h2 className="mb-4 text-xl font-semibold text-expery-blue">Servicios</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block space-y-2">
@@ -91,7 +84,7 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
         </div>
 
         <div className="mt-5 space-y-4">
-          <h3 className="text-base font-semibold">Tarjetas</h3>
+          <h3 className="text-base font-semibold text-expery-blue">Tarjetas</h3>
           {initialData.services.cards.map((_, index) => (
             <div
               key={index}
@@ -134,7 +127,7 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
       </section>
 
       <section className="rounded-lg border bg-white p-5 shadow-sm">
-        <h2 className="mb-4 text-xl font-semibold">Contacto</h2>
+        <h2 className="mb-4 text-xl font-semibold text-expery-blue">Contacto</h2>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block space-y-2">
@@ -173,11 +166,14 @@ export default function HomeEditorForm({ initialData }: HomeEditorFormProps) {
             >
               <label className="block space-y-2">
                 <span className="text-sm text-expery-blue">Plataforma</span>
-                <input
-                  type="text"
+                <select
                   {...register(`contact.socials.${index}.platform`)}
-                  className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30"
-                />
+                  className="w-full rounded-md border px-3 py-2 text-sm outline-none transition focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30 bg-white"
+                >
+                  <option value="instagram">Instagram</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="facebook">Facebook</option>
+                </select>
               </label>
 
               <label className="block space-y-2">

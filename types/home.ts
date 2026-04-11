@@ -2,7 +2,6 @@ export interface HomeData {
   hero: {
     shipImageUrl: string;
     exploreLink: string;
-    infoLink: string;
   };
 
   services: {
@@ -25,7 +24,7 @@ export interface ServiceCard {
 }
 
 export interface SocialMedia {
-  platform: 'instagram' | 'facebook' | 'whatsapp' | 'linkedin';
+  platform: 'instagram' | 'facebook' | 'whatsapp';
   label: string;
   url: string;
 }

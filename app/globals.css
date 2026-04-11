@@ -189,7 +189,7 @@
   }
 
   .btn-secondary-gold {
-    @apply rounded-full uppercase tracking-widest font-bold bg-classic-gold hover:bg-white hover:text-black text-white;
+    @apply rounded uppercase tracking-widest font-bold bg-classic-gold hover:bg-white hover:text-black text-white;
   }
 
   /* ============================================

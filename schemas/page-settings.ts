@@ -4,7 +4,6 @@ export const HomeDataSchema = z.object({
   hero: z.object({
     shipImageUrl: z.string(),
     exploreLink: z.string(),
-    infoLink: z.string(),
   }),
   services: z.object({
     title: z.string(),
