@@ -3,7 +3,15 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { User } from "@/types/user";
+
+interface PartialUser {
+  name?: string;
+  last_name?: string;
+  email?: string;
+  password?: string;
+  rol?: string;
+  isActive?: boolean;
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -19,7 +27,13 @@ export async function comparePasswords(
 /**
  * Create a new user
  */
-export async function createUser(data: User) {
+export async function createUser(data: {
+  name: string;
+  last_name: string;
+  email: string;
+  rol: string;
+  password: string;
+}) {
   try {
     const hashedPassword = await hashPassword(data.password);
 
@@ -60,17 +74,7 @@ export async function createUser(data: User) {
 /**
  * Update an existing user
  */
-export async function updateUser(
-  id: string,
-  data: {
-    name?: string;
-    last_name?: string;
-    email?: string;
-    password?: string;
-    rol?: string;
-    isActive?: boolean;
-  },
-) {
+export async function updateUser(id: string, data: PartialUser) {
   try {
     const updateData: Record<string, unknown> = {};
 
@@ -79,7 +83,7 @@ export async function updateUser(
     if (data.email !== undefined) updateData.email = data.email;
     if (data.rol !== undefined) updateData.rol = data.rol;
     if (data.isActive !== undefined) updateData.isActive = data.isActive;
-    if (data.password !== undefined) {
+    if (data.password?.trim()) {
       updateData.password = await hashPassword(data.password);
     }
 
@@ -243,11 +247,16 @@ export async function authenticateUser(email: string, password: string) {
       };
     }
 
-    const { password: _, ...userWithoutPassword } = user;
-
     return {
       success: true,
-      user: userWithoutPassword,
+      user: {
+        id: user.id,
+        name: user.name,
+        last_name: user.last_name,
+        email: user.email,
+        rol: user.rol,
+        isActive: user.isActive,
+      },
     };
   } catch (error) {
     console.error("Error authenticating user:", error);

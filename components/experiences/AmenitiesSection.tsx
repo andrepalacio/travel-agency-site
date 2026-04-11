@@ -1,17 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { DetailedExperience } from "@/types/experience";
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.04, duration: 0.45, ease: "easeOut" },
-  }),
+    transition: { duration: 0.45, ease: "easeOut" as const },
+  },
 };
 
 export function AmenitiesSection({
@@ -30,10 +30,9 @@ export function AmenitiesSection({
             {data.roomTitle}
           </h2>
           <ul className="grid grid-cols-1 gap-4">
-            {data.roomList.map((item, i) => (
+            {data.roomList.map((item) => (
               <motion.li
-                key={i}
-                custom={i}
+                key={item}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.3 }}
@@ -46,7 +45,7 @@ export function AmenitiesSection({
             ))}
           </ul>
         </div>
-        <div className="order-1 md:order-2 relative h-[28rem] rounded-2xl overflow-hidden shadow-2xl">
+        <div className="order-1 md:order-2 relative h-112 rounded-2xl overflow-hidden shadow-2xl">
           <Image src={data.roomImage} alt="Habitación" fill className="object-cover" />
         </div>
       </div>
@@ -61,7 +60,7 @@ export function AmenitiesSection({
           La lista de inclusiones se movió debajo de la imagen porque al superponerla
           las listas largas desbordaban el contenedor y colapsaban el layout en móvil.
         */}
-        <div className="relative h-[24rem] md:h-[32rem] rounded-[2rem] overflow-hidden">
+        <div className="relative h-96 md:h-128 rounded-[2rem] overflow-hidden">
           <Image src={data.includesImage} alt="Inclusiones" fill className="object-cover" />
           <div className="card-overlay-dark" />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -72,10 +71,9 @@ export function AmenitiesSection({
         </div>
 
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {data.includesList.map((item, i) => (
+          {data.includesList.map((item) => (
             <motion.li
-              key={i}
-              custom={i}
+              key={item}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
@@ -90,18 +88,18 @@ export function AmenitiesSection({
 
         {data.optionalGrid && data.optionalGrid.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {data.optionalGrid.map((img, i) => (
+            {data.optionalGrid.map((img) => (
               <motion.div
-                key={i}
+                key={img}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06, duration: 0.35 }}
+                transition={{ duration: 0.35 }}
                 className="aspect-square relative rounded-xl overflow-hidden cursor-zoom-in"
               >
                 <Image
                   src={img}
-                  alt={`Detalle ${i + 1}`}
+                  alt="Detalle"
                   fill
                   className="object-cover transition-opacity duration-300 hover:opacity-80 active:opacity-70"
                 />
@@ -118,8 +116,8 @@ export function AmenitiesSection({
               Aquello que NO incluye
             </h4>
             <ul className="space-y-3 opacity-85 text-sm">
-              {data.notIncludedList.map((li, i) => (
-                <li key={i}>— {li}</li>
+              {data.notIncludedList.map((li) => (
+                <li key={li}>— {li}</li>
               ))}
             </ul>
           </div>
@@ -128,8 +126,8 @@ export function AmenitiesSection({
               Requisitos para el viaje
             </h4>
             <ul className="space-y-3 opacity-85 text-sm">
-              {data.requirementsList.map((li, i) => (
-                <li key={i}>• {li}</li>
+              {data.requirementsList.map((li) => (
+                <li key={li}>• {li}</li>
               ))}
             </ul>
           </div>

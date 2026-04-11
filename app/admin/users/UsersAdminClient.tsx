@@ -10,19 +10,9 @@ import { UserForm } from "@/components/admin/users/UserForm";
 import { DeleteDialog } from "@/components/admin/users/DeleteDialog";
 import { UserFormValues } from "@/schemas/users";
 import { Button } from "@/components/ui/button";
+import { User } from "@/types/user";
 
-interface User {
-  id: string;
-  name: string;
-  last_name: string;
-  email: string;
-  rol: "ADMIN" | "EDITOR" | "USUARIO";
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date | null;
-}
-
-export default function UsersAdminClient({ users }: { users: User[] }) {
+export default function UsersAdminClient({ users }: Readonly<{ users: User[] }>) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showForm, setShowForm] = useState(false);
@@ -47,16 +37,42 @@ export default function UsersAdminClient({ users }: { users: User[] }) {
   const handleSave = async (data: UserFormValues) => {
     startTransition(async () => {
       try {
-        const result = editingUser
-          ? await updateUser(editingUser.id, data)
-          : await createUser(data);
+        if (editingUser) {
+          const result = await updateUser(editingUser.id, {
+            ...data,
+            password: data.password?.trim() ? data.password : undefined,
+          });
+
+          if (result.success) {
+            toast.success("Usuario actualizado.");
+            handleCancel();
+            router.refresh();
+          } else {
+            toast.error(result.message || "Algo salió mal.");
+          }
+
+          return;
+        }
+
+        if (!data.password?.trim()) {
+          toast.error("La contraseña es obligatoria para crear un usuario.");
+          return;
+        }
+
+        const result = await createUser({
+          name: data.name,
+          last_name: data.last_name,
+          email: data.email,
+          rol: data.rol,
+          password: data.password,
+        });
 
         if (result.success) {
-          toast.success(editingUser ? "Usuario actualizado." : "Usuario creado.");
+          toast.success("Usuario creado.");
           handleCancel();
           router.refresh();
         } else {
-          toast.error(result.error || "Algo salió mal.");
+          toast.error(result.message || "Algo salió mal.");
         }
       } catch {
         toast.error("Error de conexión con el servidor.");
@@ -96,7 +112,7 @@ export default function UsersAdminClient({ users }: { users: User[] }) {
     <div className="mx-auto max-w-6xl space-y-6">
       <div className="flex items-center justify-between gap-4">
         <h1 className="title-h3 text-expery-blue">Gestión de Usuarios</h1>
-        <Button onClick={handleNew} className="btn-primary !mt-0" disabled={isPending}>
+        <Button onClick={handleNew} className="btn-primary mt-0" disabled={isPending}>
           Nuevo Usuario
         </Button>
       </div>
