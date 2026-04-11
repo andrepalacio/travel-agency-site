@@ -14,7 +14,6 @@ export function CruiseCard({
   readonly index: number;
   readonly onClick: () => void;
 }) {
-  // Alternar el orden: imagen izquierda o derecha según el índice
   const isEven = index % 2 === 0;
 
   return (
@@ -49,7 +48,7 @@ export function CruiseCard({
 
           <Button
             variant="ghost"
-            className="btn-primary w-1/2"
+            className="btn-primary w-fit"
             onClick={onClick}
           >
             {data.ctaText}

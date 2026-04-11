@@ -137,7 +137,7 @@ export default function CruiseForm({
           <button
             type="submit"
             disabled={isSaving}
-            className="rounded text-sm font-medium bg-expery-blue px-4 py-2 text-white cursor-pointer hover:bg-expery-blue/85 transition-colors disabled:opacity-60"
+            className="btn-primary !mt-0 !py-2 !px-4 disabled:opacity-60"
           >
             {isSaving ? "Guardando..." : isEditing ? "Actualizar crucero" : "Guardar crucero"}
           </button>
