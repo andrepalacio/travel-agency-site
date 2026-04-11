@@ -2,12 +2,12 @@
 
 import { z } from "zod";
 import { useEffect, useState } from "react";
-import type { ComponentProps } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CruiseSchema } from "@/schemas/cruise";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Input } from "@/components/ui/input";
+import { FormTextarea as Textarea } from "@/components/admin/FormTextarea";
 
 type CruiseFormInput = z.input<typeof CruiseSchema>;
 export type CruiseFormValues = z.output<typeof CruiseSchema>;
@@ -18,15 +18,6 @@ type CruiseFormProps = {
   isEditing: boolean;
   onCancel: () => void;
 };
-
-function Textarea({ className = "", ...props }: ComponentProps<"textarea">) {
-  return (
-    <textarea
-      className={`w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-classic-gold focus-visible:ring-2 focus-visible:ring-classic-gold/30 ${className}`}
-      {...props}
-    />
-  );
-}
 
 export default function CruiseForm({
   defaultValues,

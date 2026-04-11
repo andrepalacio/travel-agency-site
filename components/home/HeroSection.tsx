@@ -7,6 +7,7 @@ import Link from "next/link";
 import { HomeData } from "@/types/home";
 import { FormSidebar } from "@/components/forms/FormSidebar";
 import { BrochureForm } from "@/components/forms/BrochureForm";
+import { ContactForm } from "@/components/forms/ContactForm";
 
 export function HeroSection({
   data,
@@ -15,7 +16,7 @@ export function HeroSection({
   data: HomeData["hero"];
   brochures: readonly { id: number; name: string }[];
 }>) {
-  const [activeForm, setActiveForm] = useState<"brochure" | null>(null);
+  const [activeForm, setActiveForm] = useState<"brochure" | "contact" | null>(null);
   const closeForm = () => setActiveForm(null);
 
   return (
@@ -54,10 +55,10 @@ export function HeroSection({
           Explorar
         </Link>
         <button
-          onClick={() => setActiveForm("brochure")}
+          onClick={() => setActiveForm("contact")}
           className="btn-link-transparent"
         >
-          Solicita más información
+          Más información
         </button>
       </div>
 
@@ -67,6 +68,17 @@ export function HeroSection({
         text="Recibe a tu correo electrónico el brochure de tu experiencia de interés"
       >
         <BrochureForm brochures={brochures} />
+      </FormSidebar>
+
+      <FormSidebar
+        isOpen={activeForm === "contact"}
+        onClose={closeForm}
+        text="Completa el formulario y uno de nuestros asesores se pondrá en contacto contigo"
+      >
+        <ContactForm
+          type="cruise"
+          selector={brochures.map((b) => ({ title: b.name }))}
+        />
       </FormSidebar>
     </section>
   );
