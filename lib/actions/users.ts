@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
+import { User } from "@/types/user";
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -18,13 +19,7 @@ export async function comparePasswords(
 /**
  * Create a new user
  */
-export async function createUser(data: {
-  name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  rol?: string;
-}) {
+export async function createUser(data: User) {
   try {
     const hashedPassword = await hashPassword(data.password);
 
@@ -228,7 +223,7 @@ export async function authenticateUser(email: string, password: string) {
     if (!user) {
       return {
         success: false,
-        message: "Credenciales incorrectas",
+        message: "Usuario o contraseña incorrectas",
       };
     }
 
@@ -244,7 +239,7 @@ export async function authenticateUser(email: string, password: string) {
     if (!isValidPassword) {
       return {
         success: false,
-        message: "Credenciales incorrectas",
+        message: "Usuario o contraseña incorrectas",
       };
     }
 

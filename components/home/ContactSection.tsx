@@ -35,8 +35,7 @@ export function ContactSection({ data }: Readonly<{ data: HomeData['contact'] }>
           viewport={{ once: true }}
           className="flex justify-center items-center relative"
         >
-          {/* Círculo Gris (Color Principal Placeholder) */}
-          <div className="w-72 h-72 md:w-108 md:h-108 bg-expery-blue rounded-full flex flex-col justify-center items-center p-12 text-center text-white relative">
+          <div className="w-72 h-auto md:w-108 md:h-108 bg-expery-blue rounded-xl flex flex-col justify-center items-center p-12 text-center text-white relative">
             <h3 className="text-3xl font-bold mb-8 leading-snug">
               {data.circleTitle}
             </h3>

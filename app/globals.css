@@ -189,14 +189,14 @@
   }
 
   .btn-secondary-gold {
-    @apply rounded-full uppercase tracking-widest font-bold bg-classic-gold hover:bg-white hover:text-black text-black;
+    @apply rounded-full uppercase tracking-widest font-bold bg-classic-gold hover:bg-white hover:text-black text-white;
   }
 
   /* ============================================
      SECTION CONTAINERS
      ============================================ */
   .section-container {
-    @apply py-24 px-6 md:px-20;
+    @apply p-6 md:py-24 md:px-20;
   }
 
   .section-container-tight {

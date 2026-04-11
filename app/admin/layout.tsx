@@ -28,7 +28,7 @@ export default async function AdminLayout({ children }: { readonly children: Rea
             <form action={logoutAdmin}>
               <button
                 type="submit"
-                className="rounded-md bg-classic-gold px-4 py-2 text-sm font-bold text-black hover:bg-elegant-beige transition-colors"
+                className="btn-secondary-gold px-4 py-2"
               >
                 Cerrar sesión
               </button>
@@ -60,7 +60,7 @@ export default async function AdminLayout({ children }: { readonly children: Rea
           <form action={logoutAdmin}>
             <button
               type="submit"
-              className="w-full rounded-md bg-classic-gold px-4 py-3 text-sm font-bold text-black hover:bg-elegant-beige transition-colors uppercase tracking-widest"
+              className="btn-secondary-gold w-full px-4 py-3"
             >
               Cerrar sesión
             </button>
