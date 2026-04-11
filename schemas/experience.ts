@@ -50,3 +50,4 @@ export type IntroData = z.infer<typeof IntroSchema>;
 export type ItineraryData = z.infer<typeof ItinerarySchema>;
 export type AmenitiesData = z.infer<typeof AmenitiesSchema>;
 export type ExperienceData = z.infer<typeof ExperienceSchema>;
+export type ParsedExperience = z.infer<typeof ExperienceSchema>;
